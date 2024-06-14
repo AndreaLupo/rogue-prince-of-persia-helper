@@ -20,8 +20,8 @@ export type MedallionPosition = 0 | 1 | 2 | 3;
 
 export type SlotHighlighting = 'None' | 'Selected' | 'Upgrading' | 'Downgrading';
 
-export type TriggeringAction = 'Vault' | 'Kick' | 'ShieldBreaker' | 'TakeHit' | 'EnemyCollideOstacle' | 'EnemyKilled' | 'EnemyStunned' | 'LandOnEnemyFromBehind' |
-                              'EnemyKilledUsingEnvironment' | 'HitEnemyFromAfar' | 'GoldCoinSpent' | 'FindWellOfDreams' | 'DiveAttack';
+export type TriggeringAction = 'Vault' | 'Kick' | 'AuraBreaker' | 'TakeHit' | 'EnemyCollideOstacle' | 'EnemyKilled' | 'EnemyStunned' | 'LandOnEnemyFromBehind' |
+                              'EnemyKilledUsingEnvironment' | 'HitEnemyFromAfar' | 'GoldCoinSpent' | 'FindWellOfDreams' | 'DiveAttack' | 'Death';
 
 export type Direction = 'Left' | 'Right' | 'None';
 export type Hop = 0 | 1 | 2;

@@ -111,7 +111,7 @@
   on:mouseover={considerMedallion} on:click={checkAndSetSelectedMedallion} on:focus={() => {}}>
   <!-- just one slot! -->
   {#each spaceSlot as theSlot(theSlot.id)}
-    <div class={slot.highlighting.toLowerCase()} animate:flip={{duration:flipDurationMs}}>
+    <div  class={ 'medallion-holder ' + slot.highlighting.toLowerCase()} animate:flip={{duration:flipDurationMs}}>
       <div>
         {#if $selectedMedallionStore && theSlot.highlighting === 'Selected'}
           <MedallionUi medallion={$selectedMedallionStore} showTitle={false} showCurrentLevel={true} imageDimension="large"></MedallionUi>
@@ -128,10 +128,12 @@
             {/await}
         {/if}
       </div>
-
-      <Fa size="xs" icon={faDiamond} color={ diamondColors[0] }/>
-      <Fa size="xs" icon={faDiamond} color={ diamondColors[1] }/>
-      <Fa size="xs" icon={faDiamond} color={ diamondColors[2] }/>
+      <div>
+        <Fa size="xs" icon={faDiamond} color={ diamondColors[0] }/>
+        <Fa size="xs" icon={faDiamond} color={ diamondColors[1] }/>
+        <Fa size="xs" icon={faDiamond} color={ diamondColors[2] }/>
+      </div>
+      
     </div>
   {/each}
   
@@ -167,6 +169,12 @@
 
   img {
     width: 120px;
+  }
+  
+  .medallion-holder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
 

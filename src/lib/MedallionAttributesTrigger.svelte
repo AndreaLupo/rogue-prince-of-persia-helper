@@ -16,9 +16,9 @@
       intro = 'When an enemy';
       highlight = 'collides with an obstacle'
       break;
-    case "ShieldBreaker":
-      intro = 'When an enemy';
-      highlight = 'collides with an obstacle'
+    case "AuraBreaker":
+      intro = 'Every time you break a';
+      highlight = 'protective aura';
       break;
     case "TakeHit":
       intro = 'When an enemy';

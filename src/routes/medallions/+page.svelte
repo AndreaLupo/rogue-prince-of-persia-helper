@@ -25,7 +25,7 @@
 
 </script>
 
-<main>
+<main id="medallions">
   
   <Build></Build>
 
@@ -58,5 +58,9 @@
     grid-template-columns: repeat(12, 1fr);
     row-gap: 1rem;
     column-gap: 1rem;
+  }
+  button {
+    font-family: 'rogue_pop';
+    text-transform: uppercase;
   }
 </style>

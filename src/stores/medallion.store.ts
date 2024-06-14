@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import type { AttributeAction, Direction, Hop, Measure, Medallion, Upgradable } from '../types';
+import type { AttributeAction, Direction, Hop, Measure, Medallion, Upgradable } from '$lib/../types';
 
 const getUpgrade = (direction: Direction, hop: Hop) => { 
   return {direction, hop};
@@ -72,38 +72,38 @@ const medallionsList: Medallion[] = [
     
   },
   {
-    id: 'flaming-shield-breaker',
-    name: 'Flaming shield Breaker',
+    id: 'flaming-aura-breaker',
+    name: 'Flaming aura Breaker',
     upgradeMask: {
       upgrades: [
         getUpgrade('Left', 1)
       ]
     },
     description: '',
-    triggeringAction: 'ShieldBreaker',
+    triggeringAction: 'AuraBreaker',
     attributes: [
       restoreEnergyPoints(0, 'Restore {} points', 35),
       restoreHealthPoints(2, 'Restore {} points', 50),
       setFire(3)
     ],
     currentLevel: 0,
-    imageName: 'medallion-flaming-breakable-shild',
+    imageName: 'medallion-flaming-aura-breaker',
   },
   {
-    id: 'sticky-shield-breaker',
-    name: 'Sticky shield Breaker',
+    id: 'sticky-aura-breaker',
+    name: 'Sticky aura Breaker',
     upgradeMask: {
       upgrades: [
         getUpgrade('Right', 1)
       ]
     },
     description: '',
-    triggeringAction: 'ShieldBreaker',
+    triggeringAction: 'AuraBreaker',
     attributes: [
       spreadResin(0)
     ],
     currentLevel: 0,
-    imageName: 'medallion-sticky-shield-breaker',
+    imageName: 'medallion-sticky-aura-breaker',
   },
   {
     id: 'flaming-counter',
@@ -508,8 +508,8 @@ const medallionsList: Medallion[] = [
     imageName: 'medallion-spartan',
   },
   {
-    id: 'shield-breaker',
-    name: 'shield Breaker',
+    id: 'aura-breaker',
+    name: 'aura Breaker',
     upgradeMask: {
       upgrades: [
         getUpgrade('Left', 1),
@@ -517,13 +517,13 @@ const medallionsList: Medallion[] = [
       ]
     },
     description: '',
-    triggeringAction: 'ShieldBreaker',
+    triggeringAction: 'AuraBreaker',
     attributes: [
       restoreEnergyPoints(1, '', 25),
       restoreEnergyPoints(1, '', 25, true)
     ],
     currentLevel: 0,
-    imageName: 'medallion-shield-breaker',
+    imageName: 'medallion-aura-breaker',
   },
   {
     id: 'slicing_dive',
@@ -540,6 +540,23 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-dive',
+    
+  },
+  {
+    id: 'immortal',
+    name: 'Immortal',
+    upgradeMask: {
+      upgrades: [
+        getUpgrade('Right', 1),
+      ]
+    },
+    description: '',
+    triggeringAction: 'Death',
+    attributes: [
+      hurlDaggers(0, '', 40)
+    ],
+    currentLevel: 0,
+    imageName: 'medallion-immortal',
     
   },
 ];
