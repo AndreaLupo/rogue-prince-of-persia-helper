@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MedallionAttribute } from "../types";
+  import type { MedallionAttribute } from "../../../types";
   import Fa from 'svelte-fa';
   import { faDiamond, faCircle } from '@fortawesome/free-solid-svg-icons';
 

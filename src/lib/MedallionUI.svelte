@@ -2,9 +2,9 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy } from "svelte";
   import type { Medallion } from "../types";
-  import MedallionUpgradePalette from "./MedallionUpgradePalette.svelte";
-  import MedallionAttributesTrigger from "./MedallionAttributesTrigger.svelte";
-  import MedallionAttribute from './MedallionAttribute.svelte';
+  import MedallionUpgradePalette from "./components/medallions/MedallionUpgradePalette.svelte";
+  import MedallionAttributesTrigger from "./components/medallions/MedallionAttributesTrigger.svelte";
+  import MedallionAttribute from './components/medallions/MedallionAttribute.svelte';
   import { selectedMedallionStore } from "../stores/medallion.store";
   import { get } from "svelte/store";
   import { buildStore } from "../stores/build.store";

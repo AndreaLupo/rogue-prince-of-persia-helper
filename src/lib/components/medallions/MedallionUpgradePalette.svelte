@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MedallionLevelUpgrade, MedallionUpgradeMask } from "../types";
+  import type { MedallionLevelUpgrade, MedallionUpgradeMask } from "../../../types";
   import MedallionUpgradePaletteItem from "./MedallionUpgradePaletteItem.svelte";
 
   export let upgrades: MedallionUpgradeMask;
