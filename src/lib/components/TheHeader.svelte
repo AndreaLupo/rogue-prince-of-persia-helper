@@ -15,6 +15,10 @@
           <a href="medallions">Medallions</a>
         </li>
         
+		<li class="menu-intern block-hide-small">
+		  <a href="medallions">Builds</a>
+		</li>
+
         <li class="menu-intern block-hide-small">
         </li>
     </ul>       
