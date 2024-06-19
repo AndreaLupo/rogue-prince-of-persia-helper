@@ -42,7 +42,7 @@
 	}
 
 	.background-wrapper {
-		background-image: url('/background.jpg');
+		background-image: url('/background_wall.jpg');
 		position: absolute;
 		top: 0;
 		left: 0;
