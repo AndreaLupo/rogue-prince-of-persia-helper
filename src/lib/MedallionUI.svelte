@@ -8,6 +8,7 @@
   import { selectedMedallionStore } from "../stores/medallion.store";
   import { get } from "svelte/store";
   import { buildStore } from "../stores/build.store";
+    import MedallionDiamonds from "./components/MedallionDiamonds.svelte";
 
 
   const dispatch = createEventDispatcher();
@@ -15,7 +16,7 @@
   export let showCurrentLevel = false;
   export let showTitle = false;
   export let imageDimension: ImageDimension = 'normal';
-
+  export let selectable = true;
 
   let showPopup = false;
   let position = 'right'; // 'right' or 'left'
@@ -45,6 +46,9 @@
   }
 
   function selectMedallion() {
+    if(!selectable) {
+      return;
+    }
     const selectedMedallion = get(selectedMedallionStore);
     
     for(const medallion of buildStore.getMedallionsInSlots()) {
@@ -103,7 +107,7 @@
       <img {src} alt="Image" class={imageDimension} />
     {/await}
     {#if showCurrentLevel}
-      <div>{medallion.currentLevel}</div>
+      <MedallionDiamonds level={medallion.currentLevel}></MedallionDiamonds>
     {/if}
   </div>
 
@@ -207,6 +211,13 @@
   .attributes {
     padding: 1rem;
     background-color: #231C2E;
+  }
+
+  .main-element {
+    flex-direction: column;
+    justify-content: center;
+    display: flex;
+    align-items: center;
   }
 
 </style>

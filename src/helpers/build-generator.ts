@@ -38,13 +38,15 @@ const medallions = get(medallionStore);
   function getValidBuildsWithLevels(medallions: Medallion[]): { build: Medallion[], levels: number[] }[] {
     const comboLength = 4;
     const allCombinations = getCombinations(medallions, comboLength);
-  
+    
+
     return allCombinations
       .map(build => ({ build, levels: calculateLevels(build) }))
       .map(({ build, levels}) => {
         for(let index = 0; index < build.length; index++) {
           const medallion = build[index];
           medallion.currentLevel = levels[index];
+          build[index] = copyMedallion(medallion);
         }
         return {build, levels};
       })

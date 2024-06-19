@@ -13,20 +13,63 @@
 
 
     function filterByMedallionsLevel(level: number) {
+        const start = Date.now();
         builds = builds.splice(0, builds.length-1);
 
+        const newBuilds = [];
         console.log('All builds:', allBuilds.length);
         for(const build of allBuilds) {
             for(const medallion of build) {
+                if(!medallion.currentLevel) {
+                    // this is just a medallion level 0
+                }
                 if(medallion.currentLevel >= level) {
-                    builds.push(build);
+                    newBuilds.push(build);
                     break;
                 }
             }
         }
+        console.log(newBuilds);
+        builds = [...newBuilds];
         console.log('Filtered builds:', builds.length);
         console.log('Finish!');
+        const end = Date.now();
+        console.log('Time:', end - start);
         // allBuilds.filter(build => build.filter(medallion => medallion.currentLevel >= level));
+    }
+
+    function filterByAllAttributesUnlocked() {
+        builds = builds.splice(0, builds.length-1);
+
+        const newBuilds = [];
+        console.log('All builds:', allBuilds.length);
+        for(const build of allBuilds) {
+            const medallionsOk = [];
+            for(const medallion of build) {
+                
+                let choose = true;
+                for(const attribute of medallion.attributes) {
+                    if(medallion.currentLevel < attribute.requiredLevel) {
+                        // attribute not unlocked - medallion not ok
+                        choose = false;
+                        break;
+                    }
+                }
+                medallionsOk.push(choose);
+                if(!choose) {
+                    // not check other medallions in build since this one is already not ok!
+                    break;
+                }
+            }
+
+            if(medallionsOk.every(el => el === true)) {
+                newBuilds.push(build);
+            }
+        }
+        console.log(newBuilds);
+        builds = [...newBuilds];
+        console.log('Filtered builds:', builds.length);
+        console.log('Finish!');
     }
 
     function addPage() {
@@ -44,13 +87,14 @@
     <div>Total combinations: {allBuilds.length}</div>
 
     <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
+    <button on:click={() => filterByAllAttributesUnlocked()}>All attributes unlocked</button>
 
     {#each builds as build, index}
         <div class="grid">
-            <MedallionUi medallion={build[0]} showCurrentLevel={true} ></MedallionUi>
-            <MedallionUi medallion={build[1]} showCurrentLevel={true} ></MedallionUi>
-            <MedallionUi medallion={build[2]} showCurrentLevel={true} ></MedallionUi>
-            <MedallionUi medallion={build[3]} showCurrentLevel={true} ></MedallionUi>
+            <MedallionUi medallion={build[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build[2]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
         </div>    
     {/each}
     <button on:click={ () => { addPage() }}>Load more</button>
