@@ -3,18 +3,26 @@
 
     
     import { getAllBuilds } from '../../../helpers/build-generator';
-    import MedallionAttribute from '$lib/components/medallions/MedallionAttribute.svelte';
     import type { Medallion } from '../../../types';
   
     const allBuilds = getAllBuilds();
+
     let builds: Medallion[][] = [];
+    let filteredBuilds: Medallion[][] = [];
     let page = 0;    
     let size = 20;
+    let showMedallionsNameFilter = false;
+    let showPositionedMedallionsNameFilter = false;
+
+    let medallionNameSearch = '';
+    let positionedMedallionNameSearch = '';
+    let positionSearch = 0;
 
 
     function filterByMedallionsLevel(level: number) {
         const start = Date.now();
-        builds = builds.splice(0, builds.length-1);
+        filteredBuilds.splice(0, filteredBuilds.length);
+        builds.splice(0, builds.length);
 
         const newBuilds = [];
         console.log('All builds:', allBuilds.length);
@@ -30,16 +38,18 @@
             }
         }
         console.log(newBuilds);
-        builds = [...newBuilds];
-        console.log('Filtered builds:', builds.length);
+        filteredBuilds = [...newBuilds];
+        console.log('Filtered builds:', filteredBuilds.length);
         console.log('Finish!');
         const end = Date.now();
         console.log('Time:', end - start);
-        // allBuilds.filter(build => build.filter(medallion => medallion.currentLevel >= level));
+        page = 0;
+        getNewPageOfFilteredBuilds();
     }
 
     function filterByAllAttributesUnlocked() {
-        builds = builds.splice(0, builds.length-1);
+        filteredBuilds.splice(0, filteredBuilds.length);
+        builds.splice(0, builds.length);
 
         const newBuilds = [];
         console.log('All builds:', allBuilds.length);
@@ -66,30 +76,73 @@
                 newBuilds.push(build);
             }
         }
-        console.log(newBuilds);
-        builds = [...newBuilds];
-        console.log('Filtered builds:', builds.length);
-        console.log('Finish!');
+        filteredBuilds = [...newBuilds];
+        page = 0;
+        getNewPageOfFilteredBuilds();
     }
 
-    function addPage() {
+    function filterByMedallionsName() {
+        filteredBuilds.splice(0, filteredBuilds.length);
+        builds.splice(0, builds.length);
+
+        const newBuilds = [];
+        
+        for(const build of allBuilds) {
+            for(let index = 0; index < build.length; index++) {
+                const medallion = build[index];
+                if(showMedallionsNameFilter) {
+                    if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase())) {
+                        newBuilds.push(build);
+                        break;
+                    }
+                }
+                if(showPositionedMedallionsNameFilter) {
+                    if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase()) && index === (positionSearch-1)) {
+                        newBuilds.push(build);
+                        break;
+                    }
+                }
+            }
+        }
+        filteredBuilds = [...newBuilds];
+        page = 0;
+        getNewPageOfFilteredBuilds();
+    }
+
+    function getNewPageOfFilteredBuilds() {
         builds = [
             ...builds,
-            ...allBuilds.splice(size * page, size * (page + 1) - 1)
-        ];
+            ...filteredBuilds.splice(size * page, size * (page + 1) - 1)
+        ]
     }
 
+    filteredBuilds = [...allBuilds];
     builds = allBuilds.splice(size * page, size * (page + 1) - 1);
-
   </script>
 
 <div>
     <div>Total combinations: {allBuilds.length}</div>
 
-    <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
-    <button on:click={() => filterByAllAttributesUnlocked()}>All attributes unlocked</button>
+    <div>
+        <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
+        <button on:click={() => filterByAllAttributesUnlocked()}>All attributes unlocked</button>
+        <button on:click={() => showMedallionsNameFilter=true}>Filter by medallions name</button>
+        <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
+    </div>
+    {#if showMedallionsNameFilter}
+        <input bind:value={medallionNameSearch}/>
+        <button on:click={() => filterByMedallionsName()}>Filter</button>
+    {/if}
 
-    {#each builds as build, index}
+    {#if showPositionedMedallionsNameFilter}
+        <input bind:value={medallionNameSearch}/>
+        <input type="number" min=1 max=4 bind:value={positionSearch}/>
+        <button on:click={() => filterByMedallionsName()}>Filter</button>
+    {/if}
+
+    <div>Filtered combinations: {filteredBuilds.length}</div>
+
+    {#each builds as build}
         <div class="grid">
             <MedallionUi medallion={build[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
             <MedallionUi medallion={build[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
@@ -97,7 +150,7 @@
             <MedallionUi medallion={build[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
         </div>    
     {/each}
-    <button on:click={ () => { addPage() }}>Load more</button>
+    <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
 </div>
 
 <style>

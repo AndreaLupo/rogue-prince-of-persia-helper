@@ -21,8 +21,16 @@ const restoreEnergyPoints = (requiredLevel: number, description: string, amount:
   return getAttribute(requiredLevel, description, 'restore', 'Energy', additional, amount, 'points')
 }
 
+const restoreEnergyPointsPerc = (requiredLevel: number, description: string, amount: number, additional?: boolean) => {
+  return getAttribute(requiredLevel, description, 'restore', 'Energy', additional, amount, 'percentage')
+}
+
 const restoreHealthPoints = (requiredLevel: number, description: string, amount: number, additional?: boolean) => {
   return getAttribute(requiredLevel, description, 'restore', 'Health', additional, amount, 'points')
+}
+
+const restoreHealthPointsPerc = (requiredLevel: number, description: string, amount: number, additional?: boolean) => {
+  return getAttribute(requiredLevel, description, 'restore', 'Health', additional, amount, 'percentage')
 }
 
 const receiveGoldCoins = (requiredLevel: number, description: string, amount: number, additional?: boolean) => {
@@ -502,7 +510,9 @@ const medallionsList: Medallion[] = [
     description: '',
     triggeringAction: 'EnemyCollideOstacle',
     attributes: [
-      restoreEnergyPoints(0, 'Restore {} points', 15),
+      restoreEnergyPointsPerc(0, 'Restore {} points', 15),
+      restoreEnergyPointsPerc(1, 'Restore {} points', 15, true),
+      restoreEnergyPointsPerc(2, 'Restore {} points', 15, true),
     ],
     currentLevel: 0,
     imageName: 'medallion-spartan',
@@ -553,10 +563,84 @@ const medallionsList: Medallion[] = [
     description: '',
     triggeringAction: 'Death',
     attributes: [
-      hurlDaggers(0, '', 40)
+      restoreHealthPointsPerc(0, 'Restore % health', 50)
     ],
     currentLevel: 0,
     imageName: 'medallion-immortal',
+    
+  },
+  {
+    id: 'flaming_dive',
+    name: 'Flaming Dive',
+    upgradeMask: {
+      upgrades: [
+        getUpgrade('Right', 1),
+      ]
+    },
+    description: '',
+    triggeringAction: 'DiveAttack',
+    attributes: [
+      setFire(2)
+    ],
+    currentLevel: 0,
+    imageName: 'medallion-flaming-dive',
+    
+  },
+  {
+    id: 'pyromaniac',
+    name: 'Pyromaniac',
+    upgradeMask: {
+      upgrades: [
+        getUpgrade('Right', 1),
+      ]
+    },
+    description: '',
+    triggeringAction: 'None',
+    attributes: [
+      {
+        requiredLevel: 1,
+        description: 'Killing a burning enemy spreads the fire to nearby enemies',
+        action: 'set'
+      }
+    ],
+    currentLevel: 0,
+    imageName: 'medallion-pyromaniac',
+    
+  },
+  {
+    id: 'paper_lion',
+    name: 'Paper Lion',
+    upgradeMask: {
+      upgrades: [
+        getUpgrade('Right', 1),
+      ]
+    },
+    description: 'This medallion increase the damage you inflict, as well as the damage you receive.',
+    triggeringAction: 'None',
+    attributes: [
+      {
+        requiredLevel: 0,
+        description: '+25% damage inflicted and received',
+        action: 'set'
+      },
+      {
+        requiredLevel: 1,
+        description: '+25% damage inflicted and received',
+        action: 'set'
+      },
+      {
+        requiredLevel: 2,
+        description: '+25% damage inflicted and received',
+        action: 'set'
+      },
+      {
+        requiredLevel: 3,
+        description: '+25% damage inflicted and received',
+        action: 'set'
+      },
+    ],
+    currentLevel: 0,
+    imageName: 'medallion-paper-lion',
     
   },
 ];

@@ -12,7 +12,13 @@ export type UpgradableFilter = {
   upgradable: Upgradable;
 }
 
-export type Filter = ActionFilter | UpgradableFilter;
+export type NameFilter = {
+  type: 'name';
+  name: string;
+}
+
+
+export type Filter = ActionFilter | UpgradableFilter | NameFilter;
 
 
 export const filteringCriteria = writable<Filter[]>([]);
