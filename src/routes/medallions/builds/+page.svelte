@@ -23,6 +23,7 @@
     let reactionFilters: any[] = [];
     let medallionFilters: any[] = [];
 
+    
     const colorFire = '#ec8612';
     const colorResin = '#3b4091';
     const colorPoison = '#89ac4a';
@@ -123,6 +124,7 @@
         const newBuilds = [];
         
         for(const build of startBuilds) {
+            let matchingMedallion = 0;
             for(let index = 0; index < build.medallions.length; index++) {
                 const medallion = build.medallions[index];
                 
@@ -130,7 +132,7 @@
                     const selectedMedallion: Medallion = selectedMedallions.value;
 
                     if(medallion.name.toLowerCase().includes(selectedMedallion.name.toLowerCase())) {
-                        newBuilds.push(build);
+                        matchingMedallion++;
                         break;
                     }
                     
@@ -140,6 +142,9 @@
                             break;
                         }
                     }
+                }
+                if(matchingMedallion === medallionFilters.length) {
+                    newBuilds.push(build);
                 }
                 
             }
@@ -316,7 +321,6 @@
     </div>
 
     <div>
-        <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
     </div>
     {#if showMedallionsNameFilter}
@@ -338,7 +342,10 @@
         {/each}
     </div>
    
-    <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
+    <div class="load-wrapper">
+        <div>Loaded {(page+1)*size} of {filteredBuilds.length} total results</div>
+        <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
+    </div>
 </main>
 
 <style lang="scss">
@@ -388,5 +395,18 @@
         padding: 1rem;
         background-color: #2A2A2A;
         border-radius: 15px;
+
+        span {
+            font-family: 'rogue_pop';
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    }
+
+    .load-wrapper {
+        margin-top: 1rem;
+        display: block;
+        text-align: center;
     }
 </style>
