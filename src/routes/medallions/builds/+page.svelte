@@ -3,12 +3,13 @@
 
     
     import { getAllBuilds } from '../../../helpers/build-generator';
-    import type { Medallion } from '../../../types';
+    import medallions from '../../../stores/medallion.store';
+    import type { Build, Medallion } from '../../../types';
   
     const allBuilds = getAllBuilds();
 
-    let builds: Medallion[][] = [];
-    let filteredBuilds: Medallion[][] = [];
+    let builds: Build[] = [];
+    let filteredBuilds: Build[] = [];
     let page = 0;    
     let size = 20;
     let showMedallionsNameFilter = false;
@@ -27,7 +28,7 @@
         const newBuilds = [];
         console.log('All builds:', allBuilds.length);
         for(const build of allBuilds) {
-            for(const medallion of build) {
+            for(const medallion of build.medallions) {
                 if(!medallion.currentLevel) {
                     // this is just a medallion level 0
                 }
@@ -55,7 +56,7 @@
         console.log('All builds:', allBuilds.length);
         for(const build of allBuilds) {
             const medallionsOk = [];
-            for(const medallion of build) {
+            for(const medallion of build.medallions) {
                 
                 let choose = true;
                 for(const attribute of medallion.attributes) {
@@ -88,8 +89,8 @@
         const newBuilds = [];
         
         for(const build of allBuilds) {
-            for(let index = 0; index < build.length; index++) {
-                const medallion = build[index];
+            for(let index = 0; index < build.medallions.length; index++) {
+                const medallion = build.medallions[index];
                 if(showMedallionsNameFilter) {
                     if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase())) {
                         newBuilds.push(build);
@@ -144,10 +145,10 @@
 
     {#each builds as build}
         <div class="grid">
-            <MedallionUi medallion={build[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build[2]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build.medallions[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build.medallions[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build.medallions[2]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+            <MedallionUi medallion={build.medallions[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
         </div>    
     {/each}
     <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>

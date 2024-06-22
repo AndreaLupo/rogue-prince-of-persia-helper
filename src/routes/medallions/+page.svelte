@@ -3,7 +3,7 @@
 
   import Build from '$lib/Build.svelte';
   
-  import { type Chemical, type Medallion, type MedallionPosition, type TriggeringAction, type Upgradable } from '$lib/../types';
+  import { type Elemental, type Medallion, type MedallionPosition, type TriggeringAction, type Upgradable } from '$lib/../types';
   import { filteredMedallions } from '$lib/../stores/filtered-medallions.store';
   import { addFilterToMedallions, resetMedallionsFilters } from '$lib/../stores/medallions-filtering-criteria.store';
 
@@ -14,9 +14,9 @@
     addFilterToMedallions({type: 'action', triggeringAction});
   }
 
-  const filterByChemical = (chemical: Chemical) => {
+  const filterByElemental = (elemental: Elemental) => {
     resetMedallionsFilters();
-    addFilterToMedallions({type: 'upgradable', upgradable: chemical as unknown as Upgradable});
+    addFilterToMedallions({type: 'upgradable', upgradable: elemental as unknown as Upgradable});
   }
 
   filteredMedallions.subscribe((medallions) => {
@@ -35,9 +35,9 @@
     <button on:click={() => showFilters = true}>Show filters</button>
   {/if}
   {#if showFilters}
-    <button on:click={() => filterByChemical('Poison')}>Poison</button>
-    <button on:click={() => filterByChemical('Fire')}>Fire</button>
-    <button on:click={() => filterByChemical('Resin')}>Resin</button>
+    <button on:click={() => filterByElemental('Poison')}>Poison</button>
+    <button on:click={() => filterByElemental('Fire')}>Fire</button>
+    <button on:click={() => filterByElemental('Resin')}>Resin</button>
     <button on:click={() => resetMedallionsFilters()}>Reset filters </button>
   {/if}
 

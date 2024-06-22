@@ -1,21 +1,22 @@
 import medallionStore from "$lib/../stores/medallion.store";
 import { get } from "svelte/store";
-import type { Medallion } from "../types";
+import type { Build, Medallion } from "../types";
 import { faBreadSlice } from "@fortawesome/free-solid-svg-icons";
+import { updateElementalReactions } from "./elemental-reaction-checker";
 
 const medallions = get(medallionStore);
 
 // Function to calculate the level of each position in the build based on upgrade masks
-  function calculateLevels(build: Medallion[]): number[] {
-    const levels = new Array(build.length).fill(0);
+  function calculateLevels(build: Build): number[] {
+    const levels = new Array(build.medallions.length).fill(0);
 
-    build.forEach((medallion, position) => {
+    build.medallions.forEach((medallion, position) => {
       medallion.upgradeMask.upgrades.forEach(upgrade => {
         const targetPosition = 
           upgrade.direction === 'Right' ? position + upgrade.hop :
           upgrade.direction === 'Left' ? position - upgrade.hop : position;
 
-        if (targetPosition >= 0 && targetPosition < build.length) {
+        if (targetPosition >= 0 && targetPosition < build.medallions.length) {
           levels[targetPosition] += 1;
         }
       });
@@ -30,27 +31,36 @@ const medallions = get(medallionStore);
   }
   
   // Function to filter builds based on the criteria
-  function isValidBuild(build: Medallion[]): boolean {
+  function isValidBuild(build: Build): boolean {
     const levels = calculateLevels(build);
-    return build.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position]));
+    return build.medallions.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position]));
   }
 
-  function getValidBuildsWithLevels(medallions: Medallion[]): { build: Medallion[], levels: number[] }[] {
+  function getValidBuildsWithLevels(medallions: Medallion[]): { build: Build, levels: number[] }[] {
     const comboLength = 4;
     const allCombinations = getCombinations(medallions, comboLength);
     
+    const builds: Build[] = [];
 
-    return allCombinations
+    for(const combination of allCombinations) {
+      const build: Build = {
+        medallions: combination,
+        reactions: []
+      }
+      builds.push(build);
+    }
+
+    return builds
       .map(build => ({ build, levels: calculateLevels(build) }))
       .map(({ build, levels}) => {
-        for(let index = 0; index < build.length; index++) {
-          const medallion = build[index];
+        for(let index = 0; index < build.medallions.length; index++) {
+          const medallion = build.medallions[index];
           medallion.currentLevel = levels[index];
-          build[index] = copyMedallion(medallion);
+          build.medallions[index] = copyMedallion(medallion);
         }
         return {build, levels};
       })
-      .filter(({ build, levels }) => build.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position])))
+      .filter(({ build, levels }) => build.medallions.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position])))
       ;
   }
   
@@ -80,18 +90,18 @@ const medallions = get(medallionStore);
   }
 
   // Function to calculate the score of a build based on the number of unlocked attributes and the levels of medallions
-  function calculateBuildScore(build: Medallion[], levels: number[]): number {
+  function calculateBuildScore(build: Build, levels: number[]): number {
     const attributesWeight = 10; // Weight for the number of unlocked attributes
     const levelWeight = 1; // Weight for the levels
 
-    const unlockedAttributesCount = build.reduce((sum, medallion, index) => sum + getUnlockedAttributes(medallion, levels[index]), 0);
+    const unlockedAttributesCount = build.medallions.reduce((sum, medallion, index) => sum + getUnlockedAttributes(medallion, levels[index]), 0);
     const totalLevel = levels.reduce((sum, level) => sum + level, 0);
 
     return (attributesWeight * unlockedAttributesCount) + (levelWeight * totalLevel);
   }
 
   // Function to sort builds based on the calculated score
-  function sortBuilds(validBuildsWithLevels: { build: Medallion[], levels: number[] }[]): { build: Medallion[], levels: number[] }[] {
+  function sortBuilds(validBuildsWithLevels: { build: Build, levels: number[] }[]): { build: Build, levels: number[] }[] {
     return validBuildsWithLevels.sort((buildA, buildB) => {
       const scoreA = calculateBuildScore(buildA.build, buildA.levels);
       const scoreB = calculateBuildScore(buildB.build, buildB.levels);
@@ -121,8 +131,15 @@ const medallions = get(medallionStore);
   }
   
   // Main function to get all builds
-  export function getAllBuilds(): Medallion[][] {
+  export function getAllBuilds(): Build[] {
     const validBuildsWithLevels = getValidBuildsWithLevels(medallions);
+
+    for(const levelBuild of validBuildsWithLevels) {
+      updateElementalReactions(levelBuild.build);
+      if(levelBuild.build.reactions.length > 0) {
+        console.log('Reaction for build!', JSON.stringify(levelBuild.build.medallions.map(m => m.name)), JSON.stringify(levelBuild.build.reactions));
+      }
+    }
 
     // console.log('validBuildsWithLevels:', validBuildsWithLevels.length);
     const sortedBuildsWithLevels = sortBuilds(validBuildsWithLevels);
@@ -135,9 +152,9 @@ const medallions = get(medallionStore);
     const allMedallionsLevel: {name: string,  level: number}[][] = [];
     for(const levelBuild of sortedBuildsWithLevels) {
       const build = levelBuild.build;
-      const medallionsName = build.map(medallion => medallion.name);
+      const medallionsName = build.medallions.map(medallion => medallion.name);
       const buildLevels = [];
-      for(let index = 0; index < build.length; index++) {
+      for(let index = 0; index < build.medallions.length; index++) {
         const medallionsLevel = {
           name: medallionsName[index],
           level: levelBuild.levels[index]

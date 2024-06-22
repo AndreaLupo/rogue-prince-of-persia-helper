@@ -35,11 +35,11 @@ export type MedallionUpgradeMask = {
   upgrades: MedallionLevelUpgrade[];
 }
 
-export type Chemical = 'Fire' | 'Resin' | 'Poison';
+export type Elemental = 'Fire' | 'Resin' | 'Poison';
 export type Throwable = 'Daggers';
 export type Resource = 'Gold' | 'Health' | 'Energy';
 
-export type Upgradable = Chemical | Resource | Throwable;
+export type Upgradable = Elemental | Resource | Throwable;
 
 export type AttributeAction = 'set' | 'inflict' | 'restore' | 'release' | 'spread' | 'receive' | 'hurl';
 
@@ -53,4 +53,18 @@ export type MedallionAttribute = {
   upgradable?: Upgradable;
   additional?: boolean;
   measure?: Measure;
+}
+
+export type Build = {
+  medallions: Medallion[],
+  reactions: Reaction[]
+} ;
+
+export type Reaction =  {
+  name: string,
+  elements: [Elemental, Elemental]
+};
+
+export function isElemental(upgradable: Upgradable | undefined): upgradable is Elemental {
+  return upgradable === 'Fire' || upgradable === 'Resin' || upgradable === 'Poison';
 }

@@ -20,11 +20,32 @@
   .hero {
       display: flex;
       flex-direction: row;
+      align-items: center;
       height: calc(100vh - 70px); /* Full height minus the header height */
       background-image: url('/hero_background.jpg');
+      position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
       background-size: cover;
       background-position: center;
       position: relative;
+      z-index: -1;
+  }
+
+  section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
   }
 
   /* Left and right halves */
@@ -41,5 +62,21 @@
 
   .right-half {
       background-image: url('/rpop_full_logo.png');
-  }
+        max-height: 25%;
+    }
+
+  .background-wrapper {
+    background-image: url('/background_wall.jpg');
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%) brightness(0.3); /* Apply greyscale effect */
+
+    /* Or use blur effect: */
+    /* filter: blur(5px); */
+    z-index: -1;
+}
+
 </style>

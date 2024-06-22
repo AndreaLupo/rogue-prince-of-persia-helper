@@ -16,7 +16,7 @@
         </li>
         
 		<li class="menu-intern block-hide-small">
-		  <a href="medallions">Builds</a>
+		  <a href="medallions/builds">Builds</a>
 		</li>
 
         <li class="menu-intern block-hide-small">
