@@ -1,10 +1,14 @@
 <script lang="ts">
     import MedallionUi from '$lib/MedallionUI.svelte';
-
+    import BuildDetail from '$lib/components/BuildDetail.svelte';
+    import ReactionsPalette from '$lib/components/ReactionsPalette.svelte';
+    import ReactionPalette from '$lib/components/ReactionsPalette.svelte';
+    import MultiSelect from 'svelte-multiselect';
     
     import { getAllBuilds } from '../../../helpers/build-generator';
     import medallions from '../../../stores/medallion.store';
-    import type { Build, Medallion } from '../../../types';
+    import type { Build, Medallion, Reaction } from '../../../types';
+    import { elementalReactions } from '../../../helpers/elemental-reaction-checker';
   
     const allBuilds = getAllBuilds();
 
@@ -14,10 +18,22 @@
     let size = 20;
     let showMedallionsNameFilter = false;
     let showPositionedMedallionsNameFilter = false;
+    let showReactionsFilter = false;
+
+    let reactionFilters: any[] = [];
+
 
     let medallionNameSearch = '';
     let positionedMedallionNameSearch = '';
     let positionSearch = 0;
+
+    let reactionsLabels: { label: string, value: Reaction}[] = [];
+    for(const reaction of elementalReactions) {
+        reactionsLabels.push({
+            label: reaction.name,
+            value: reaction
+        });
+    }
 
 
     function filterByMedallionsLevel(level: number) {
@@ -110,6 +126,31 @@
         getNewPageOfFilteredBuilds();
     }
 
+    function filterByReactions() {
+        filteredBuilds.splice(0, filteredBuilds.length);
+        builds.splice(0, builds.length);
+
+        const newBuilds = [];
+        
+        for(const build of allBuilds) {
+            for(let index = 0; index < build.reactions.length; index++) {
+                debugger;
+                const reaction = build.reactions[index];
+                if(showReactionsFilter) {
+                    const reactions: Reaction[] = reactionFilters.map(reactionLabel => reactionLabel.value);
+                    if(reactions.includes(reaction)) {
+                        newBuilds.push(build);
+                        break;
+                    }
+                }
+            }
+        }
+        filteredBuilds = [...newBuilds];
+        page = 0;
+        getNewPageOfFilteredBuilds();
+    }
+
+
     function getNewPageOfFilteredBuilds() {
         builds = [
             ...builds,
@@ -129,6 +170,7 @@
         <button on:click={() => filterByAllAttributesUnlocked()}>All attributes unlocked</button>
         <button on:click={() => showMedallionsNameFilter=true}>Filter by medallions name</button>
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
+        <button on:click={() => showReactionsFilter=true}>Filter by reactions</button>
     </div>
     {#if showMedallionsNameFilter}
         <input bind:value={medallionNameSearch}/>
@@ -141,24 +183,15 @@
         <button on:click={() => filterByMedallionsName()}>Filter</button>
     {/if}
 
+    {#if showReactionsFilter}
+        <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={1} maxSelect={3} on:change={ () => { filterByReactions()} }/>
+    {/if}
+
     <div>Filtered combinations: {filteredBuilds.length}</div>
 
     {#each builds as build}
-        <div class="grid">
-            <MedallionUi medallion={build.medallions[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build.medallions[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build.medallions[2]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-            <MedallionUi medallion={build.medallions[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-        </div>    
+        <BuildDetail {build}></BuildDetail>   
     {/each}
     <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
 </div>
 
-<style>
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        row-gap: 1rem;
-        column-gap: 2rem;
-    }
-</style>

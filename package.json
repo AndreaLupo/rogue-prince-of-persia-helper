@@ -24,7 +24,8 @@
 		"@fortawesome/free-brands-svg-icons": "^6.5.2",
 		"@fortawesome/free-solid-svg-icons": "^6.5.2",
 		"svelte-dnd-action": "^0.9.48",
-		"svelte-fa": "^4.0.2"
+		"svelte-fa": "^4.0.2",
+		"svelte-multiselect": "^10.3.0"
 	},
 	"type": "module"
 }

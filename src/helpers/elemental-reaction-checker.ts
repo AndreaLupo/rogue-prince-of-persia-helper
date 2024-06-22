@@ -2,7 +2,7 @@ import { isElemental, type Build, type Elemental, type Reaction } from "../types
 
 
 
-const elementalReactionsAvailable: Reaction[] = [
+export const elementalReactions: Reaction[] = [
     {
         name: 'Flaming resin',
         elements: ['Fire', 'Resin']
@@ -32,8 +32,9 @@ export function updateElementalReactions(build: Build): Reaction[] {
 
     build.reactions = []
 
-    for(const reaction of elementalReactionsAvailable) {
+    for(const reaction of elementalReactions) {
         const elements = reaction.elements;
+
         if(activeElements.includes(elements[0]) && activeElements.includes(elements[1])) {
             build.reactions.push(reaction);
         }

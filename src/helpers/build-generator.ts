@@ -30,11 +30,6 @@ const medallions = get(medallionStore);
     return medallion.attributes.some(attribute => level >= attribute.requiredLevel);
   }
   
-  // Function to filter builds based on the criteria
-  function isValidBuild(build: Build): boolean {
-    const levels = calculateLevels(build);
-    return build.medallions.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position]));
-  }
 
   function getValidBuildsWithLevels(medallions: Medallion[]): { build: Build, levels: number[] }[] {
     const comboLength = 4;
@@ -47,10 +42,12 @@ const medallions = get(medallionStore);
         medallions: combination,
         reactions: []
       }
+      updateElementalReactions(build);
+
       builds.push(build);
     }
 
-    return builds
+    const newBuilds = builds
       .map(build => ({ build, levels: calculateLevels(build) }))
       .map(({ build, levels}) => {
         for(let index = 0; index < build.medallions.length; index++) {
@@ -61,7 +58,10 @@ const medallions = get(medallionStore);
         return {build, levels};
       })
       .filter(({ build, levels }) => build.medallions.every((medallion, position) => hasUnlockedAttribute(medallion, levels[position])))
-      ;
+  
+      newBuilds.forEach(buildLevel => updateElementalReactions(buildLevel.build));
+
+    return newBuilds;
   }
   
   // Utility function to create a deep copy of a medallion
@@ -134,12 +134,7 @@ const medallions = get(medallionStore);
   export function getAllBuilds(): Build[] {
     const validBuildsWithLevels = getValidBuildsWithLevels(medallions);
 
-    for(const levelBuild of validBuildsWithLevels) {
-      updateElementalReactions(levelBuild.build);
-      if(levelBuild.build.reactions.length > 0) {
-        console.log('Reaction for build!', JSON.stringify(levelBuild.build.medallions.map(m => m.name)), JSON.stringify(levelBuild.build.reactions));
-      }
-    }
+    console.log(validBuildsWithLevels[0]);
 
     // console.log('validBuildsWithLevels:', validBuildsWithLevels.length);
     const sortedBuildsWithLevels = sortBuilds(validBuildsWithLevels);
