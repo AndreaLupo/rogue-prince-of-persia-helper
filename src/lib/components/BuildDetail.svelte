@@ -9,10 +9,10 @@
 
 <div class="grid">
     <div class="medallions">
-        <MedallionUi medallion={build.medallions[0]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-        <MedallionUi medallion={build.medallions[1]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-        <MedallionUi medallion={build.medallions[2]} showCurrentLevel={true} selectable={false} ></MedallionUi>
-        <MedallionUi medallion={build.medallions[3]} showCurrentLevel={true} selectable={false} ></MedallionUi>
+        <MedallionUi medallion={build.medallions[0]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>
+        <MedallionUi medallion={build.medallions[1]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>
+        <MedallionUi medallion={build.medallions[2]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>
+        <MedallionUi medallion={build.medallions[3]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>
     </div>
     <ReactionsPalette build={build}></ReactionsPalette>
 
@@ -28,7 +28,7 @@
             gap: 1rem;
         }
 
-        border: 2px solid #ffbf4e;
+        border: 2px solid #ffbf4e99;
         border-radius: 15px;
         padding: 1rem;
     }

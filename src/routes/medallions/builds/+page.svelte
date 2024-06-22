@@ -16,10 +16,9 @@
     let builds: Build[] = [];
     let filteredBuilds: Build[] = [];
     let page = 0;    
-    let size = 20;
+    let size = 30;
     let showMedallionsNameFilter = false;
     let showPositionedMedallionsNameFilter = false;
-    let showReactionsFilter = false;
 
     let reactionFilters: any[] = [];
     let medallionFilters: any[] = [];
@@ -43,6 +42,7 @@
     let medallionNameSearch = '';
     let positionedMedallionNameSearch = '';
     let positionSearch = 0;
+    let allAttributesUnlocked = false;
 
     let reactionsLabels: { label: string, value: Reaction}[] = [];
     for(const reaction of elementalReactions) {
@@ -82,13 +82,12 @@
         getNewPageOfFilteredBuilds();
     }
 
-    function filterByAllAttributesUnlocked() {
-        filteredBuilds.splice(0, filteredBuilds.length);
-        builds.splice(0, builds.length);
+    function filterByAllAttributesUnlocked(startBuilds: Build[]): Build[] {
+        //filteredBuilds.splice(0, filteredBuilds.length);
+       // builds.splice(0, builds.length);
 
         const newBuilds = [];
-        console.log('All builds:', allBuilds.length);
-        for(const build of allBuilds) {
+        for(const build of startBuilds) {
             const medallionsOk = [];
             for(const medallion of build.medallions) {
                 
@@ -111,19 +110,19 @@
                 newBuilds.push(build);
             }
         }
-        filteredBuilds = [...newBuilds];
-        page = 0;
-        getNewPageOfFilteredBuilds();
+        //filteredBuilds = [...newBuilds];
+        //page = 0;
+        //getNewPageOfFilteredBuilds();
+        return newBuilds
     }
 
-    function filterByMedallionsName() {
-        debugger;
-        filteredBuilds.splice(0, filteredBuilds.length);
-        builds.splice(0, builds.length);
+    function filterByMedallionsName(startBuilds: Build[]): Build[] {
+        //filteredBuilds.splice(0, filteredBuilds.length);
+        //builds.splice(0, builds.length);
 
         const newBuilds = [];
         
-        for(const build of allBuilds) {
+        for(const build of startBuilds) {
             for(let index = 0; index < build.medallions.length; index++) {
                 const medallion = build.medallions[index];
                 
@@ -145,19 +144,41 @@
                 
             }
         }
-        filteredBuilds = [...newBuilds];
-        page = 0;
-        getNewPageOfFilteredBuilds();
+        //filteredBuilds = [...newBuilds];
+        //page = 0;
+        //getNewPageOfFilteredBuilds();
+
+        return newBuilds;
     }
 
-    function filterByReactions() {
-        filteredBuilds.splice(0, filteredBuilds.length);
-        builds.splice(0, builds.length);
+    function filterByReactions(startBuilds: Build[]): Build[] {
+        //filteredBuilds.splice(0, filteredBuilds.length);
+        //builds.splice(0, builds.length);
 
         const newBuilds = [];
         
-        for(const build of allBuilds) {
-            for(let index = 0; index < build.reactions.length; index++) {
+
+        for(const build of startBuilds) {
+            if(reactionFilters.length === 0) {
+                newBuilds.push(build);
+                continue;
+            }
+
+            let excluded = false;
+
+            for(let index = 0; index < reactionFilters.length; index++) {
+                const reaction = reactionFilters[index].value;
+
+                if(!build.reactions.includes(reaction)) {
+                    excluded = true;
+                    break;
+                }
+            }
+            if(!excluded) {
+                newBuilds.push(build);
+            }
+
+            /*for(let index = 0; index < build.reactions.length; index++) {
                 debugger;
                 const reaction = build.reactions[index];
                 const reactions: Reaction[] = reactionFilters.map(reactionLabel => reactionLabel.value);
@@ -166,23 +187,64 @@
                     break;
                 }
                 
+            }*/
+        }
+        //filteredBuilds = [...newBuilds];
+        //page = 0;
+        //getNewPageOfFilteredBuilds();
+        return newBuilds;
+    }
+
+
+    function filter() {
+        filteredBuilds.splice(0, filteredBuilds.length);
+        builds.splice(0, builds.length);
+
+        const newBuilds = [];
+        const oldBuilds = allBuilds;
+
+        if(medallionFilters.length > 0) {
+            const filtered = filterByMedallionsName(oldBuilds);
+            for(const build of filtered) {
+                newBuilds.push(build);
             }
         }
+        if(reactionFilters.length > 0) {
+            const starting = newBuilds.length > 0? newBuilds : oldBuilds;
+
+            const filtered = filterByReactions(starting);
+            // clear since only filtered element must be there, not the one from previous filter!
+            newBuilds.splice(0, newBuilds.length);
+            for(const build of filtered) {
+                newBuilds.push(build);
+            }
+        }
+        if(allAttributesUnlocked) {
+            const starting = newBuilds.length > 0? newBuilds : oldBuilds;
+
+            const filtered = filterByAllAttributesUnlocked(starting);
+            // clear since only filtered element must be there, not the one from previous filter!
+            newBuilds.splice(0, newBuilds.length);
+            for(const build of filtered) {
+                newBuilds.push(build);
+            }
+        }
+
+
         filteredBuilds = [...newBuilds];
         page = 0;
         getNewPageOfFilteredBuilds();
     }
 
-
     function getNewPageOfFilteredBuilds() {
         builds = [
             ...builds,
-            ...filteredBuilds.splice(size * page, size * (page + 1) - 1)
+            ...filteredBuilds.splice(size * page, size * (page + 1))
         ]
     }
 
     filteredBuilds = [...allBuilds];
-    builds = allBuilds.splice(size * page, size * (page + 1) - 1);
+    builds = allBuilds.splice(size * page, size * (page + 1));
   </script>
 
 <main>
@@ -191,8 +253,9 @@
     <div class="filters">
         <div>
             <MultiSelect bind:selected={medallionFilters} options={medallionsLabels} 
+                placeholder="Type a medallion name or select it from the list.."
                 minSelect={0} maxSelect={4} 
-                on:change={ () => { filterByMedallionsName()} } >
+                on:change={ () => { filter()} } >
                 <div slot="option" let:option>
                     <div class="multiselect-option">
                         {#await import(`$lib/assets/medallions/${option.value.imageName}.png`) then { default: src }}
@@ -207,12 +270,31 @@
 
         <div>
             <div>
-                All attributes unlocked
+                <label>
+                    <input type="checkbox" bind:checked={allAttributesUnlocked} on:change={() => { filter()}}/>
+                    All attributes unlocked
+                </label>
+                   
             </div>
 
             <div>
                 <span>Reactions</span>
-                <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={3} on:change={ () => { filterByReactions()} }/>
+                <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={1} on:change={ () => { filter()} }>
+                    <div slot="option" let:option>
+                        <div class="multiselect-option">
+                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[0])}/>
+                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[1])}/>
+                            {option.label}
+                        </div> 
+                    </div>
+                    <div slot="selected" let:option>
+                        <div class="multiselect-option-selected">
+                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[0])}/>
+                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[1])}/>
+                            {option.label}
+                        </div> 
+                    </div>
+                </MultiSelect>
             </div>
         </div>
 
@@ -235,24 +317,17 @@
 
     <div>
         <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
-        <button on:click={() => filterByAllAttributesUnlocked()}>All attributes unlocked</button>
-        <button on:click={() => showMedallionsNameFilter=true}>Filter by medallions name</button>
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
-        <button on:click={() => showReactionsFilter=true}>Filter by reactions</button>
     </div>
     {#if showMedallionsNameFilter}
         <input bind:value={medallionNameSearch}/>
-        <button on:click={() => filterByMedallionsName()}>Filter</button>
+        <button on:click={() => filter()}>Filter</button>
     {/if}
 
     {#if showPositionedMedallionsNameFilter}
         <input bind:value={medallionNameSearch}/>
         <input type="number" min=1 max=4 bind:value={positionSearch}/>
-        <button on:click={() => filterByMedallionsName()}>Filter</button>
-    {/if}
-
-    {#if showReactionsFilter}
-        <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={3} on:change={ () => { filterByReactions()} }/>
+        <button on:click={() => filter()}>Filter</button>
     {/if}
 
     <div>Filtered builds: {filteredBuilds.length}</div>
@@ -285,6 +360,10 @@
         align-items: center;
         gap: 1rem;
         color: #2A2A2A;
+
+        &-selected {
+            color: #dddddd;
+        }
     }
     
     .builds-grid {
@@ -292,6 +371,14 @@
         grid-template-columns: repeat(2, 1fr);
         row-gap: 1rem;
         column-gap: 1rem;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 700px) {
+            grid-template-columns: 1fr;
+        }
     }
 
     .legend {

@@ -21,30 +21,30 @@
   }
 </script>
 
-<div class="reactions-container">
-    {#each build.reactions as reaction}
-        <span class="reaction">
-            {#each reaction.elements as element}
-                <div>
-                    <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
-                    <!--<span>{element}</span>-->
-                </div>
-            {:else}
-                <!-- this way the empty -->
-                <div>No reaction.</div>
-                <div></div>
-                <div></div>
-                <div></div>
-            {/each}
-        </span>
-        
-    {/each}
-</div>
+{#if build.reactions.length > 0}
+    <div class="reactions-container">
+        {#each build.reactions as reaction}
+            <span class="reaction">
+                {#each reaction.elements as element}
+                    <div>
+                        <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
+                        <!--<span>{element}</span>-->
+                    </div>
+                {/each}
+            </span>
+        {:else}
+            <!-- this way the empty -->
+            
+        {/each}
+    </div>
+{:else}
+    <div class="no-reactions">No reactions.</div>
+{/if}
 
 <style lang="scss">
 .reactions-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     background-color: #2A2A2A;
     border-radius: 15px;
@@ -58,6 +58,13 @@
         
     }
     
+}
+
+.no-reactions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2A2A2A;
 }
 
 
