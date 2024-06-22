@@ -26,9 +26,15 @@
         <span class="reaction">
             {#each reaction.elements as element}
                 <div>
-                    <Fa size="sm" icon={faCircle} color={getElementColor(element)}/>
-                    <span>{element}</span>
+                    <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
+                    <!--<span>{element}</span>-->
                 </div>
+            {:else}
+                <!-- this way the empty -->
+                <div>No reaction.</div>
+                <div></div>
+                <div></div>
+                <div></div>
             {/each}
         </span>
         
@@ -37,13 +43,15 @@
 
 <style lang="scss">
 .reactions-container {
-    display: flex;
-    align-self: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    background-color: #2A2A2A;
+    border-radius: 15px;
+    padding: 1.2rem;
     gap: 1rem;
     .reaction {
         padding: 4px 8px;
-        border: 1px solid yellow;
-        border-radius: 5px;
         display: flex;
         gap: 1rem;
         align-items: center;

@@ -20,13 +20,16 @@
 
 <style lang="scss">
     .grid {
-        display: grid;
-        grid-template-columns: 4fr 3fr;
-        row-gap: 1rem;
+        display: flex;
+        align-items: center;
         column-gap: 2rem;
         .medallions {
             display: flex;
             gap: 1rem;
         }
+
+        border: 2px solid #ffbf4e;
+        border-radius: 15px;
+        padding: 1rem;
     }
 </style>

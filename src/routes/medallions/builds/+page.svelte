@@ -1,14 +1,15 @@
 <script lang="ts">
-    import MedallionUi from '$lib/MedallionUI.svelte';
     import BuildDetail from '$lib/components/BuildDetail.svelte';
-    import ReactionsPalette from '$lib/components/ReactionsPalette.svelte';
-    import ReactionPalette from '$lib/components/ReactionsPalette.svelte';
     import MultiSelect from 'svelte-multiselect';
     
     import { getAllBuilds } from '../../../helpers/build-generator';
-    import medallions from '../../../stores/medallion.store';
-    import type { Build, Medallion, Reaction } from '../../../types';
+    import type { Build, Elemental, Medallion, Reaction } from '../../../types';
     import { elementalReactions } from '../../../helpers/elemental-reaction-checker';
+
+    import Fa from "svelte-fa";
+    import { faCircle } from '@fortawesome/free-solid-svg-icons';
+    import medallions from '../../../stores/medallion.store';
+    import { get } from 'svelte/store';
   
     const allBuilds = getAllBuilds();
 
@@ -21,6 +22,22 @@
     let showReactionsFilter = false;
 
     let reactionFilters: any[] = [];
+    let medallionFilters: any[] = [];
+
+    const colorFire = '#ec8612';
+    const colorResin = '#3b4091';
+    const colorPoison = '#89ac4a';
+
+    const getElementColor = (element: Elemental): string => {
+        switch(element) {
+            case "Fire":
+                return colorFire;
+            case "Resin":
+                return colorResin;
+            case "Poison":
+                return colorPoison;
+        }
+    };
 
 
     let medallionNameSearch = '';
@@ -35,14 +52,20 @@
         });
     }
 
+    let medallionsLabels: {label: string, value: Medallion}[] = [];
+    const medallionsList = get(medallions);
+    for(const medallion of medallionsList) {
+        medallionsLabels.push({
+            label: medallion.name,
+            value: medallion
+        });
+    }
 
     function filterByMedallionsLevel(level: number) {
-        const start = Date.now();
         filteredBuilds.splice(0, filteredBuilds.length);
         builds.splice(0, builds.length);
 
         const newBuilds = [];
-        console.log('All builds:', allBuilds.length);
         for(const build of allBuilds) {
             for(const medallion of build.medallions) {
                 if(!medallion.currentLevel) {
@@ -54,12 +77,7 @@
                 }
             }
         }
-        console.log(newBuilds);
         filteredBuilds = [...newBuilds];
-        console.log('Filtered builds:', filteredBuilds.length);
-        console.log('Finish!');
-        const end = Date.now();
-        console.log('Time:', end - start);
         page = 0;
         getNewPageOfFilteredBuilds();
     }
@@ -99,6 +117,7 @@
     }
 
     function filterByMedallionsName() {
+        debugger;
         filteredBuilds.splice(0, filteredBuilds.length);
         builds.splice(0, builds.length);
 
@@ -107,18 +126,23 @@
         for(const build of allBuilds) {
             for(let index = 0; index < build.medallions.length; index++) {
                 const medallion = build.medallions[index];
-                if(showMedallionsNameFilter) {
-                    if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase())) {
+                
+                for(const selectedMedallions of medallionFilters) {
+                    const selectedMedallion: Medallion = selectedMedallions.value;
+
+                    if(medallion.name.toLowerCase().includes(selectedMedallion.name.toLowerCase())) {
                         newBuilds.push(build);
                         break;
                     }
-                }
-                if(showPositionedMedallionsNameFilter) {
-                    if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase()) && index === (positionSearch-1)) {
-                        newBuilds.push(build);
-                        break;
+                    
+                    if(showPositionedMedallionsNameFilter) {
+                        if(medallion.name.toLowerCase().includes(medallionNameSearch.toLowerCase()) && index === (positionSearch-1)) {
+                            newBuilds.push(build);
+                            break;
+                        }
                     }
                 }
+                
             }
         }
         filteredBuilds = [...newBuilds];
@@ -136,13 +160,12 @@
             for(let index = 0; index < build.reactions.length; index++) {
                 debugger;
                 const reaction = build.reactions[index];
-                if(showReactionsFilter) {
-                    const reactions: Reaction[] = reactionFilters.map(reactionLabel => reactionLabel.value);
-                    if(reactions.includes(reaction)) {
-                        newBuilds.push(build);
-                        break;
-                    }
+                const reactions: Reaction[] = reactionFilters.map(reactionLabel => reactionLabel.value);
+                if(reactions.includes(reaction)) {
+                    newBuilds.push(build);
+                    break;
                 }
+                
             }
         }
         filteredBuilds = [...newBuilds];
@@ -162,8 +185,53 @@
     builds = allBuilds.splice(size * page, size * (page + 1) - 1);
   </script>
 
-<div>
-    <div>Total combinations: {allBuilds.length}</div>
+<main>
+    <div>Total builds: {allBuilds.length}</div>
+
+    <div class="filters">
+        <div>
+            <MultiSelect bind:selected={medallionFilters} options={medallionsLabels} 
+                minSelect={0} maxSelect={4} 
+                on:change={ () => { filterByMedallionsName()} } >
+                <div slot="option" let:option>
+                    <div class="multiselect-option">
+                        {#await import(`$lib/assets/medallions/${option.value.imageName}.png`) then { default: src }}
+                            <!-- svelte-ignore a11y-img-redundant-alt -->
+                            <img {src} alt="Image" style="width: 40px; height: auto;" />
+                        {/await}
+                        {option.label}
+                    </div> 
+                </div>
+            </MultiSelect>
+        </div>
+
+        <div>
+            <div>
+                All attributes unlocked
+            </div>
+
+            <div>
+                <span>Reactions</span>
+                <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={3} on:change={ () => { filterByReactions()} }/>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div>
+                <Fa size="lg" icon={faCircle} color={getElementColor('Fire')}/>
+                <span>Fire</span>
+            </div>
+            <div>
+                <Fa size="lg" icon={faCircle} color={getElementColor('Poison')}/>
+                <span>Poison</span>
+            </div>
+            <div>
+                <Fa size="lg" icon={faCircle} color={getElementColor('Resin')}/>
+                <span>Resin</span>
+            </div>
+            
+        </div>
+    </div>
 
     <div>
         <button on:click={() => filterByMedallionsLevel(3)}>Only level 3 medallions</button>
@@ -184,14 +252,54 @@
     {/if}
 
     {#if showReactionsFilter}
-        <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={1} maxSelect={3} on:change={ () => { filterByReactions()} }/>
+        <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={3} on:change={ () => { filterByReactions()} }/>
     {/if}
 
-    <div>Filtered combinations: {filteredBuilds.length}</div>
+    <div>Filtered builds: {filteredBuilds.length}</div>
 
-    {#each builds as build}
-        <BuildDetail {build}></BuildDetail>   
-    {/each}
+    <div class="builds-grid">
+        {#each builds as build}
+            <BuildDetail {build}></BuildDetail>   
+        {/each}
+    </div>
+   
     <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
-</div>
+</main>
 
+<style lang="scss">
+    main {
+        margin: 0 auto;
+        max-width: 1280px;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: 6fr 4fr 2fr;
+    }
+
+    .multiselect .options [role=option] {
+        background-color: #2A2A2A;
+    }
+    .multiselect-option {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #2A2A2A;
+    }
+    
+    .builds-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 1rem;
+        column-gap: 1rem;
+    }
+
+    .legend {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 1rem;
+        padding: 1rem;
+        background-color: #2A2A2A;
+        border-radius: 15px;
+    }
+</style>

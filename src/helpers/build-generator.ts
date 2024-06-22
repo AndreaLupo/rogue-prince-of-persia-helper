@@ -159,7 +159,7 @@ const medallions = get(medallionStore);
       allMedallionsLevel.push(buildLevels);
     }
 
-    console.log('Sorted builds with levels', allMedallionsLevel);
+    //console.log('Sorted builds with levels', allMedallionsLevel);
     //console.log('Sorted:', levels);
 
     return sortedBuildsWithLevels.map(({ build }) => build);
