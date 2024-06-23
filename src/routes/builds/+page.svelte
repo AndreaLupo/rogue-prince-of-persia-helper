@@ -2,15 +2,15 @@
     import BuildDetail from '$lib/components/BuildDetail.svelte';
     import MultiSelect from 'svelte-multiselect';
     
-    import { getAllBuilds } from '../../../helpers/build-generator';
-    import type { Build, Elemental, Medallion, Reaction } from '../../../types';
-    import { elementalReactions } from '../../../helpers/elemental-reaction-checker';
+    import { getAllBuilds } from '../../helpers/build-generator';
+    import type { Build, Elemental, Medallion, Reaction } from '../../types';
+    import { elementalReactions } from '../../helpers/elemental-reaction-checker';
 
     import Fa from "svelte-fa";
     import { faCircle } from '@fortawesome/free-solid-svg-icons';
-    import medallions from '../../../stores/medallion.store';
+    import medallions from '../../stores/medallion.store';
     import { get } from 'svelte/store';
-    import { filterBuilds } from '../../../helpers/build-filter';
+    import { filterBuilds } from '../../helpers/build-filter';
   
     const allBuilds = getAllBuilds();
 
