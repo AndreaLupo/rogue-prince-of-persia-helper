@@ -11,25 +11,30 @@
       box-sizing: border-box;
   }
 
-  body, html {
-      height: 100%;
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 95vh; /* Full viewport height */
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
-
   /* Hero section style */
-  .hero {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: calc(100vh - 70px); /* Full height minus the header height */
+  .hero::before {
+      content: "";
       background-image: url('/hero_background.jpg');
       position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-size: 130%;
       background-position: center;
-      position: relative;
+      background-repeat: no-repeat;
+      filter: brightness(0.8);
+      transition: background-size 0.3s ease-in-out, filter 0.3s ease-in-out;
       z-index: -1;
   }
 
@@ -59,25 +64,12 @@
 
   .left-half {
       background-image: url('/hero_prince.png');
+      filter: brightness(0.8);
   }
 
   .right-half {
-      background-image: url('/rpop_full_logo.png');
-      max-height: 20rem;
-    }
-
-  .background-wrapper {
-    background-image: url('/background_wall.jpg');
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    filter: grayscale(100%) brightness(0.3); /* Apply greyscale effect */
-
-    /* Or use blur effect: */
-    /* filter: blur(5px); */
-    z-index: -1;
-}
+    background-image: url('/rpop_full_logo.png');
+    max-height: 20rem;
+  }
 
 </style>
