@@ -1,5 +1,6 @@
 export type Medallion = {
   id: string; // required for drag-&-drop
+  key: string;
   name: string;
   upgradeMask: MedallionUpgradeMask;
   description: string;
@@ -8,6 +9,8 @@ export type Medallion = {
   currentLevel: number;
   imageName: string;
 }
+
+export type MedallionDraggable = Medallion & {name: string; label: string};
 
 export type Slot = {
   id: number;

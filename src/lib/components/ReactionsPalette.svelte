@@ -5,29 +5,16 @@
 
     export let build: Build;
 
-    const colorFire = '#ec8612';
-    const colorResin = '#3b4091';
-    const colorPoison = '#89ac4a';
-
-    const getElementColor = (element: Elemental): string => {
-    switch(element) {
-        case "Fire":
-            return colorFire;
-        case "Resin":
-            return colorResin;
-        case "Poison":
-            return colorPoison;
-    }
-  }
 </script>
 
 {#if build.reactions.length > 0}
     <div class="reactions-container">
         {#each build.reactions as reaction}
             <span class="reaction">
-                {#each reaction.elements as element}
-                    <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
-                {/each}
+                {#await import(`$lib/assets/elements/${reaction.elements[0].toLowerCase()}+${reaction.elements[1].toLowerCase()}.png`) then { default: src }}
+                    <!-- svelte-ignore a11y-img-redundant-alt -->
+                    <img {src} alt="Image" style="width: 2.4rem"/>
+                {/await}
             </span>
         {:else}
             <!-- this way the empty -->
@@ -40,9 +27,8 @@
 
 <style lang="scss">
 .reactions-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    display: flex;
+   
     background-color: #2A2A2A;
     border-radius: 15px;
     padding: 1.2rem;

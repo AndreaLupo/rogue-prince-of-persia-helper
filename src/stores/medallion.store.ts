@@ -77,7 +77,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-neurotoxic-agent',
-    
+    key: 'neurotoxic-agent'
   },
   {
     id: 'flaming-aura-breaker',
@@ -96,6 +96,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-flaming-aura-breaker',
+    key: 'flaming-aura-breaker'
   },
   {
     id: 'sticky-aura-breaker',
@@ -112,6 +113,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-aura-breaker',
+    key: 'sticky-aura-breaker'
   },
   {
     id: 'flaming-counter',
@@ -130,6 +132,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-flaming-counter',
+    key: 'flaming-counter'
   },
   {
     id: 'toxic-counter',
@@ -147,6 +150,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-toxic-counter',
+    key: 'toxic-counter'
   },
   {
     id: 'sleight-of-poison',
@@ -165,6 +169,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sleight-of-poison',
+    key: 'sleight-of-poison'
   },
   {
     id: 'sticky-trick',
@@ -181,6 +186,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-trick',
+    key: 'sticky-trick'
   },
   
   {
@@ -201,7 +207,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-vampiric-demise',
-    
+    key: 'vampiric_demise'
   },
 
 
@@ -223,7 +229,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-opportunity-knocks',
-    
+    key: 'opportunity_knocks'
   },
 
   {
@@ -244,7 +250,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-bloody-spoils',
-    
+    key: 'bloody_spoils'
   },
   {
     id: 'toxic_demise',
@@ -263,7 +269,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-toxic-demise',
-    
+    key: 'toxic_demise'
   },
 
   {
@@ -282,7 +288,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-toxic-projectile',
-    
+    key: 'toxic_projectile'
   },
   {
     id: 'flaming_projectile',
@@ -302,7 +308,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-flaming-projectile',
-    
+    key: 'flaming_projectile'
   },
 
   {
@@ -323,7 +329,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-health-insurance',
-    
+    key: 'health_insurance'
   },
 
   {
@@ -343,7 +349,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-toxic-shock',
-    
+    key: 'toxic_shock'
   },
 
   {
@@ -363,7 +369,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-flaming-kick',
-    
+    key: 'flaming_kick'
   },
 
   {
@@ -382,7 +388,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-kick',
-    
+    key: 'sticky_kick'
   },
   {
     id: 'slicing_kick',
@@ -399,7 +405,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-slicing-kick',
-    
+    key: 'slicing_kick'
   },
   {
     id: 'restorative_dream_fragment',
@@ -416,11 +422,10 @@ const medallionsList: Medallion[] = [
       restoreHealthPoints(0, 'Restore {} points', 60),
       restoreHealthPoints(1, 'Restore {} additional points', 10),
       restoreHealthPoints(2, 'Restore {} additional points', 10),
-
     ],
     currentLevel: 0,
     imageName: 'medallion-restorative-dream-fragment',
-    
+    key: 'restorative_dream_fragment'
   },
 
   {
@@ -437,11 +442,10 @@ const medallionsList: Medallion[] = [
     attributes: [
       restoreEnergyPoints(0, 'Restore {} points', 30),
       releaseCloudOfPoison(2)
-
     ],
     currentLevel: 0,
     imageName: 'medallion-toxic-vault',
-    
+    key: 'toxic_vault'
   },
 
   {
@@ -460,7 +464,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-vault',
-    
+    key: 'sticky_vault'
   },
   {
     id: 'slicing_vault',
@@ -478,7 +482,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-slicing-vault',
-    
+    key: 'slicing_vault'
   },
 
   {
@@ -496,7 +500,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-dive',
-    
+    key: 'sticky_dive'
   },
 
   {
@@ -516,6 +520,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-spartan',
+    key: 'spartan'
   },
   {
     id: 'aura-breaker',
@@ -534,6 +539,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-aura-breaker',
+    key: 'aura-breaker'
   },
   {
     id: 'slicing_dive',
@@ -550,7 +556,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-sticky-dive',
-    
+    key: 'slicing_dive'
   },
   {
     id: 'immortal',
@@ -567,7 +573,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-immortal',
-    
+    key: 'immortal'
   },
   {
     id: 'flaming_dive',
@@ -584,7 +590,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-flaming-dive',
-    
+    key: 'flaming_dive'
   },
   {
     id: 'pyromaniac',
@@ -605,7 +611,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-pyromaniac',
-    
+    key: 'pyromaniac'
   },
   {
     id: 'paper_lion',
@@ -641,7 +647,7 @@ const medallionsList: Medallion[] = [
     ],
     currentLevel: 0,
     imageName: 'medallion-paper-lion',
-    
+    key: 'paper_lion'
   },
 ];
 

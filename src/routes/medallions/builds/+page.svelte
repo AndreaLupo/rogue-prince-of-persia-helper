@@ -137,15 +137,19 @@
                 <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={1} on:change={ () => { filter()} }>
                     <div slot="option" let:option>
                         <div class="multiselect-option">
-                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[0])}/>
-                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[1])}/>
+                            {#await import(`$lib/assets/elements/${option.value.elements[0].toLowerCase()}+${option.value.elements[1].toLowerCase()}.png`) then { default: src }}
+                                <!-- svelte-ignore a11y-img-redundant-alt -->
+                                <img {src} alt="Image" style="width: 1.4rem"/>
+                            {/await}
                             {option.label}
                         </div> 
                     </div>
                     <div slot="selected" let:option>
                         <div class="multiselect-option-selected">
-                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[0])}/>
-                            <Fa size="sm" icon={faCircle} color={getElementColor(option.value.elements[1])}/>
+                            {#await import(`$lib/assets/elements/${option.value.elements[0].toLowerCase()}+${option.value.elements[1].toLowerCase()}.png`) then { default: src }}
+                                <!-- svelte-ignore a11y-img-redundant-alt -->
+                                <img {src} alt="Image" style="width: 1.4rem"/>
+                            {/await}
                             {option.label}
                         </div> 
                     </div>
@@ -154,17 +158,23 @@
         </div>
 
         <div class="legend">
-            <div>
-                <Fa size="lg" icon={faCircle} color={getElementColor('Fire')}/>
-                <span>Fire</span>
+            <div class="legend-item">
+                {#await import(`$lib/assets/elements/fire+resin.png`) then { default: src }}
+                    <!-- svelte-ignore a11y-img-redundant-alt -->
+                    <img {src} alt="Image" style="width: 2rem"/>
+                {/await}
+                <span>Fire+Resin</span>
             </div>
-            <div>
-                <Fa size="lg" icon={faCircle} color={getElementColor('Poison')}/>
-                <span>Poison</span>
+            <div class="legend-item">
+                {#await import(`$lib/assets/elements/poison+resin.png`) then { default: src }}
+                    <!-- svelte-ignore a11y-img-redundant-alt -->
+                    <img {src} alt="Image"  style="width: 2rem"/>
+                {/await}
+                <span>Poison+Resin</span>
             </div>
-            <div>
+            <div class="legend-item">
                 <Fa size="lg" icon={faCircle} color={getElementColor('Resin')}/>
-                <span>Resin</span>
+                <span>Poison+Fire</span>
             </div>
             
         </div>
@@ -260,13 +270,19 @@
     }
 
     .legend {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-direction: column;
         row-gap: 1rem;
         padding: 1rem;
         background-color: #2A2A2A;
         border-radius: 15px;
 
+        &-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+           
         span {
             font-family: 'rogue_pop';
             text-transform: uppercase;
