@@ -3,7 +3,7 @@
   <div class="right-half"></div>
 </section>
 
-<style>
+<style lang="scss">
   /* Reset default margin and padding */
   * {
       margin: 0;
@@ -27,7 +27,7 @@
         top: 0;
         left: 0;
         width: 100%;
-      background-size: cover;
+      background-size: 130%;
       background-position: center;
       position: relative;
       z-index: -1;
@@ -52,7 +52,8 @@
   .left-half, .right-half {
       width: 50%;
       height: 100%;
-      background-size: cover;
+      background-size: contain;
+      background-repeat: no-repeat;
       background-position: center;
   }
 
@@ -62,7 +63,7 @@
 
   .right-half {
       background-image: url('/rpop_full_logo.png');
-        max-height: 25%;
+      max-height: 20rem;
     }
 
   .background-wrapper {

@@ -26,10 +26,7 @@
         {#each build.reactions as reaction}
             <span class="reaction">
                 {#each reaction.elements as element}
-                    <div>
-                        <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
-                        <!--<span>{element}</span>-->
-                    </div>
+                    <Fa size="lg" icon={faCircle} color={getElementColor(element)}/>
                 {/each}
             </span>
         {:else}
@@ -44,7 +41,7 @@
 <style lang="scss">
 .reactions-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     background-color: #2A2A2A;
     border-radius: 15px;
@@ -53,7 +50,7 @@
     .reaction {
         padding: 4px 8px;
         display: flex;
-        gap: 1rem;
+        gap: 0.5rem;
         align-items: center;
         
     }
