@@ -22,6 +22,7 @@
     .grid {
         display: flex;
         align-items: center;
+        justify-content: space-evenly;
         column-gap: 2rem;
         .medallions {
             display: flex;

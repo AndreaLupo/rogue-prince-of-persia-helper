@@ -105,13 +105,16 @@
         page = page+1;
     }
 
+    function formatNumber(num: number) {
+        return Intl.NumberFormat().format(num);
+    }
+
+
     filteredBuilds = [...allBuilds];
     builds = allBuilds.splice(size * page, size * (page + 1));
   </script>
 
 <main>
-    <div>Total builds: {allBuilds.length}</div>
-
     <div class="filters">
         <div class="medallions">
             <span>Medallions</span>
@@ -128,6 +131,17 @@
                         {option.label}
                     </div> 
                 </div>
+
+                <div slot="selected" let:option>
+                    <div class="multiselect-option-selected">
+                        {#await import(`$lib/assets/medallions/${option.value.imageName}.png`) then { default: src }}
+                            <!-- svelte-ignore a11y-img-redundant-alt -->
+                            <img {src} alt="Image" style="width: 2rem"/>
+                        {/await}
+                        {option.label}
+                    </div> 
+                </div>
+
             </MultiSelect>
         </div>
 
@@ -179,18 +193,22 @@
             
         </div>
 
-        <div>
+        <!--<div>
             <label>
                 <input type="checkbox" bind:checked={allAttributesUnlocked} on:change={() => { filter()}}/>
                 All attributes unlocked
             </label>
                
         </div>
+        -->
     </div>
 
+    <!--
     <div>
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
     </div>
+    -->
+
     {#if showMedallionsNameFilter}
         <input bind:value={medallionNameSearch}/>
         <button on:click={() => filter()}>Filter</button>
@@ -202,7 +220,10 @@
         <button on:click={() => filter()}>Filter</button>
     {/if}
 
-    <div>Filtered builds: {filteredBuilds.length}</div>
+    <div class="counts">
+        <div>Total builds: <span class="number">{formatNumber(allBuilds.length)}</span></div>
+        <div>Filtered builds: <span class="number">{formatNumber(filteredBuilds.length)}</span></div>
+    </div>
 
     <div class="builds-grid">
         {#each builds as build}
@@ -218,7 +239,7 @@
 
 <style lang="scss">
     main {
-        margin: 0 auto;
+        margin: 4rem auto;
         max-width: 1280px;
     }
 
@@ -251,6 +272,9 @@
             color: #dddddd;
             font-family: 'rogue_pop';
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
     }
     
@@ -295,5 +319,18 @@
         margin-top: 1rem;
         display: block;
         text-align: center;
+    }
+
+    .counts {
+        font-family: 'rogue_pop';
+        font-size: 1.2em;
+        text-transform: uppercase;
+        text-align: right;
+        margin-bottom: 1rem;
+
+        .number {
+            color: #D6C090;
+        }
+
     }
 </style>

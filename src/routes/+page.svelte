@@ -1,6 +1,8 @@
 <section class="hero">
   <div class="left-half"></div>
-  <div class="right-half"></div>
+  <div class="right-half">
+    <div class="label">Toolkit</div>
+  </div>
 </section>
 
 <style lang="scss">
@@ -70,6 +72,19 @@
   .right-half {
     background-image: url('/rpop_full_logo.png');
     max-height: 20rem;
+    position: relative;
+
+    .label {
+      position: absolute;
+      bottom: -3rem;
+      right: 6rem;
+      font-family: 'rogue_pop';
+      text-transform: uppercase;
+      font-size: 2.4rem;
+      background-color: #0e1341cc; /* Optional: to make the text more readable */
+      padding: 4px 1rem;
+      border-radius: 5px;
+    }
   }
 
 </style>
