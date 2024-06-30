@@ -11,6 +11,8 @@
     import medallions from '../../stores/medallion.store';
     import { get } from 'svelte/store';
     import { filterBuilds } from '../../helpers/build-filter';
+    import BuildFilters from './BuildFilters.svelte';
+    import Legend from './Legend.svelte';
   
     const allBuilds = getAllBuilds();
 
@@ -277,6 +279,12 @@
         -->
     </div>
 
+
+    <div class="filters-2">
+        <BuildFilters bind:filteredBuilds={filteredBuilds} bind:builds={builds} ></BuildFilters>
+        <Legend></Legend>
+    </div>
+    
     <!--
     <div>
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
@@ -330,6 +338,12 @@
             align-items: baseline;
             gap: 1rem;
         }
+        
+    }
+    .filters-2 {
+        display: grid;
+        grid-template-columns: 10fr 2fr;
+        gap: 1rem;
         
     }
 
