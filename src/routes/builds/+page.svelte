@@ -23,10 +23,6 @@
     let showMedallionsNameFilter = false;
     let showPositionedMedallionsNameFilter = false;
 
-    let elementsFilters: any[] = [];
-    let reactionFilters: any[] = [];
-    let medallionFilters: any[] = [];
-
     $: loadedResults = (page+1)*size;
     
     const colorFire = '#ec8612';
@@ -78,6 +74,7 @@
         });
     }
 
+    /*
     function filterByMedallionsLevel(level: number) {
         filteredBuilds.splice(0, filteredBuilds.length);
         builds.splice(0, builds.length);
@@ -97,19 +94,13 @@
         filteredBuilds = [...newBuilds];
         page = 0;
         getNewPageOfFilteredBuilds();
+    }*/
+
+    
+    function formatNumber(num: number) {
+        return Intl.NumberFormat().format(num);
     }
 
-    function filter() {
-        filteredBuilds.splice(0, filteredBuilds.length);
-        builds.splice(0, builds.length);
-
-        const newBuilds = filterBuilds(medallionFilters, reactionFilters, elementsFilters, allAttributesUnlocked, activeLevelThreeAttribute);
-
-
-        filteredBuilds = [...newBuilds];
-        page = 0;
-        getNewPageOfFilteredBuilds();
-    }
 
     function getNewPageOfFilteredBuilds() {
         builds = [
@@ -119,166 +110,14 @@
         page = page+1;
     }
 
-    function formatNumber(num: number) {
-        return Intl.NumberFormat().format(num);
-    }
-
 
     filteredBuilds = [...allBuilds];
     builds = allBuilds.splice(size * page, size * (page + 1));
+
+
   </script>
 
 <main>
-    <div class="filters">
-        <div id="column-1">
-            <div class="medallions">
-                <span>Medallions</span>
-                <MultiSelect bind:selected={medallionFilters} options={medallionsLabels} 
-                    placeholder="Type a medallion name or select it from the list.."
-                    minSelect={0} maxSelect={4} 
-                    on:change={ () => { filter()} } >
-                    <div slot="option" let:option>
-                        <div class="multiselect-option">
-                            {#await import(`$lib/assets/medallions/${option.value.imageName}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 40px; height: auto;" />
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-    
-                    <div slot="selected" let:option>
-                        <div class="multiselect-option-selected">
-                            {#await import(`$lib/assets/medallions/${option.value.imageName}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 2rem"/>
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-    
-                </MultiSelect>
-            </div>
-            
-            <div>
-                <label>
-                    <input type="checkbox" bind:checked={allAttributesUnlocked} on:change={() => { filter()}}/>
-                    All attributes unlocked
-                </label>
-            </div>      
-
-            <div> 
-                <label>
-                    <input type="checkbox" bind:checked={activeLevelThreeAttribute} on:change={() => { filter()}}/>
-                    At least a level three attribute unlocked
-                </label>
-            </div>
-
-        </div>
-        
-        <div>
-            <div class="reactions">
-                <span>Elements</span>
-                <MultiSelect bind:selected={elementsFilters} options={elementsLabels} minSelect={0} maxSelect={3} on:change={ () => { filter()} }>
-                    <div slot="option" let:option>
-                        <div class="multiselect-option">
-                            {#await import(`$lib/assets/elements/${option.value.toLowerCase()}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 1.4rem"/>
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-                    <div slot="selected" let:option>
-                        <div class="multiselect-option-selected">
-                            {#await import(`$lib/assets/elements/${option.value.toLowerCase()}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 1.4rem"/>
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-                </MultiSelect>
-            </div>
-
-            <div class="reactions">
-                <span>Reactions</span>
-                <MultiSelect bind:selected={reactionFilters} options={reactionsLabels} minSelect={0} maxSelect={1} on:change={ () => { filter()} }>
-                    <div slot="option" let:option>
-                        <div class="multiselect-option">
-                            {#await import(`$lib/assets/elements/${option.value.elements[0].toLowerCase()}+${option.value.elements[1].toLowerCase()}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 1.4rem"/>
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-                    <div slot="selected" let:option>
-                        <div class="multiselect-option-selected">
-                            {#await import(`$lib/assets/elements/${option.value.elements[0].toLowerCase()}+${option.value.elements[1].toLowerCase()}.png`) then { default: src }}
-                                <!-- svelte-ignore a11y-img-redundant-alt -->
-                                <img {src} alt="Image" style="width: 1.4rem"/>
-                            {/await}
-                            {option.label}
-                        </div> 
-                    </div>
-                </MultiSelect>
-            </div>
-        </div>
-
-        <div class="legend">
-            <div class="legend-item">
-                {#await import(`$lib/assets/elements/fire.png`) then { default: src }}
-                    <!-- svelte-ignore a11y-img-redundant-alt -->
-                    <img {src} alt="Image" style="width: 2rem"/>
-                {/await}
-                <span>Fire</span>
-            </div>
-            <div class="legend-item">
-                {#await import(`$lib/assets/elements/fire+resin.png`) then { default: src }}
-                    <!-- svelte-ignore a11y-img-redundant-alt -->
-                    <img {src} alt="Image" style="width: 2rem"/>
-                {/await}
-                <span>Fire+Resin</span>
-            </div>
-            <div class="legend-item">
-                {#await import(`$lib/assets/elements/resin.png`) then { default: src }}
-                    <!-- svelte-ignore a11y-img-redundant-alt -->
-                    <img {src} alt="Image" style="width: 2rem"/>
-                {/await}
-                <span>Resin</span>
-            </div>
-            <div class="legend-item">
-                {#await import(`$lib/assets/elements/poison+resin.png`) then { default: src }}
-                    <!-- svelte-ignore a11y-img-redundant-alt -->
-                    <img {src} alt="Image"  style="width: 2rem"/>
-                {/await}
-                <span>Poison+Resin</span>
-            </div>
-            <div class="legend-item">
-                {#await import(`$lib/assets/elements/poison.png`) then { default: src }}
-                    <!-- svelte-ignore a11y-img-redundant-alt -->
-                    <img {src} alt="Image"  style="width: 2rem"/>
-                {/await}
-                <span>Poison</span>
-            </div>
-            <div class="legend-item">
-                <Fa size="lg" icon={faCircle} color={getElementColor('Resin')}/>
-                <span>Poison+Fire</span>
-            </div>
-            
-        </div>
-
-        <!--<div>
-            <label>
-                <input type="checkbox" bind:checked={allAttributesUnlocked} on:change={() => { filter()}}/>
-                All attributes unlocked
-            </label>
-               
-        </div>
-        -->
-    </div>
-
 
     <div class="filters-2">
         <BuildFilters bind:filteredBuilds={filteredBuilds} bind:builds={builds} ></BuildFilters>
@@ -290,7 +129,7 @@
         <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
     </div>
     -->
-
+    <!--
     {#if showMedallionsNameFilter}
         <input bind:value={medallionNameSearch}/>
         <button on:click={() => filter()}>Filter</button>
@@ -300,7 +139,7 @@
         <input bind:value={medallionNameSearch}/>
         <input type="number" min=1 max=4 bind:value={positionSearch}/>
         <button on:click={() => filter()}>Filter</button>
-    {/if}
+    {/if}-->
 
     <div>Note: this page will show only builds where each medallion has at least one attribute activated.</div>
 
