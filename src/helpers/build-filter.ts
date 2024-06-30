@@ -171,7 +171,9 @@ export function filterBuilds(medFilters: any[], reactFilters: any[], elemFilters
     }
 
     if(elementalFilters.length > 0) {
-        const filtered = filterByElements(oldBuilds);
+        const starting = newBuilds.length > 0? newBuilds : oldBuilds;
+
+        const filtered = filterByElements(starting);
         // clear since only filtered element must be there, not the one from previous filter!
         newBuilds.splice(0, newBuilds.length);
         for(const build of filtered) {
