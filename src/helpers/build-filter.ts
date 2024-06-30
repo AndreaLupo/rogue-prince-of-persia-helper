@@ -1,5 +1,6 @@
-import type { Build, Medallion } from "../types";
+import { isElemental, type Build, type Medallion } from "../types";
 import { getAllBuilds } from "./build-generator";
+import { elementalReactions } from "./elemental-reaction-checker";
 
 const allBuilds = getAllBuilds();
 
@@ -9,7 +10,9 @@ let filteredBuilds: Build[] = [];
 
 let reactionFilters: any[] = [];
 let medallionFilters: any[] = [];
+let elementalFilters: any[] = [];
 let allAttributesUnlocked = false;
+const MAX_ATTRIBUTE_LEVEL = 3;
 
 
 function filterByAllAttributesUnlocked(startBuilds: Build[]): Build[] {
@@ -67,6 +70,41 @@ function filterByMedallionsName(startBuilds: Build[]): Build[] {
     return newBuilds;
 }
 
+function filterByElements(startBuilds: Build[]): Build[] {
+    const newBuilds = [];
+    
+    for(const build of startBuilds) {
+        if(elementalFilters.length === 0) {
+            newBuilds.push(build);
+            continue;
+        }
+
+        let included = false;
+
+        for(let index = 0; index < elementalFilters.length; index++) {
+            if(included) {
+                break;
+            }
+            const element = elementalFilters[index].value;
+
+            for(const medallion of build.medallions ) {
+                if(included) {
+                    break;
+                }
+                for(const attribute of medallion.attributes) {
+                    if(isElemental(attribute.upgradable) && attribute.upgradable === element && medallion.currentLevel >= attribute.requiredLevel) {
+                        newBuilds.push(build);
+                        included = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+    return newBuilds;
+}
+
 function filterByReactions(startBuilds: Build[]): Build[] {
     const newBuilds = [];
     
@@ -94,11 +132,30 @@ function filterByReactions(startBuilds: Build[]): Build[] {
     return newBuilds;
 }
 
+export function filterBuildsWithActiveLevelThreeAttributes(startBuilds: Build[]): Build[] {
+    const newBuilds = [];
+    
+    for(const build of startBuilds) {
 
-export function filterBuilds(medFilters: any[], reactFilters: any[], allAttrUnlocked: boolean): Build[] {
+        for(const medallion of build.medallions) {
+            const maxAttributePresent = medallion.attributes.find(attr => attr.requiredLevel === MAX_ATTRIBUTE_LEVEL);
+
+            if(maxAttributePresent && medallion.currentLevel === MAX_ATTRIBUTE_LEVEL) {
+                newBuilds.push(build);
+                break;
+            }
+        }
+
+    }
+    return newBuilds;
+}
+
+
+export function filterBuilds(medFilters: any[], reactFilters: any[], elemFilters: any[], allAttrUnlocked: boolean, activeLevelThreeAttribute: boolean): Build[] {
     medallionFilters = medFilters;
     reactionFilters = reactFilters;
     allAttributesUnlocked = allAttrUnlocked;
+    elementalFilters = elemFilters;
 
     filteredBuilds.splice(0, filteredBuilds.length);
     builds.splice(0, builds.length);
@@ -112,6 +169,16 @@ export function filterBuilds(medFilters: any[], reactFilters: any[], allAttrUnlo
             newBuilds.push(build);
         }
     }
+
+    if(elementalFilters.length > 0) {
+        const filtered = filterByElements(oldBuilds);
+        // clear since only filtered element must be there, not the one from previous filter!
+        newBuilds.splice(0, newBuilds.length);
+        for(const build of filtered) {
+            newBuilds.push(build);
+        }
+    }
+
     if(reactionFilters.length > 0) {
         const starting = newBuilds.length > 0? newBuilds : oldBuilds;
 
@@ -126,6 +193,17 @@ export function filterBuilds(medFilters: any[], reactFilters: any[], allAttrUnlo
         const starting = newBuilds.length > 0? newBuilds : oldBuilds;
 
         const filtered = filterByAllAttributesUnlocked(starting);
+        // clear since only filtered element must be there, not the one from previous filter!
+        newBuilds.splice(0, newBuilds.length);
+        for(const build of filtered) {
+            newBuilds.push(build);
+        }
+    }
+
+    if(activeLevelThreeAttribute) {
+        const starting = newBuilds.length > 0? newBuilds : oldBuilds;
+
+        const filtered = filterBuildsWithActiveLevelThreeAttributes(starting);
         // clear since only filtered element must be there, not the one from previous filter!
         newBuilds.splice(0, newBuilds.length);
         for(const build of filtered) {

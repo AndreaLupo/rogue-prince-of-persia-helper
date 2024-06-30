@@ -7,7 +7,7 @@
 
 </script>
 
-<div class="grid">
+<div id={build.hash} class="grid">
     <div class="medallions">
         <MedallionUi medallion={build.medallions[0]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>
         <MedallionUi medallion={build.medallions[1]} showCurrentLevel={true} selectable={false} imageDimension='small' ></MedallionUi>

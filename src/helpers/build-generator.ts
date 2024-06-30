@@ -1,8 +1,9 @@
 import medallionStore from "$lib/../stores/medallion.store";
 import { get } from "svelte/store";
 import type { Build, Medallion } from "../types";
-import { faBreadSlice } from "@fortawesome/free-solid-svg-icons";
 import { updateElementalReactions } from "./elemental-reaction-checker";
+
+import sha256 from 'crypto-js/sha256';
 
 const medallions = get(medallionStore);
 
@@ -33,14 +34,15 @@ const medallions = get(medallionStore);
 
   function getValidBuildsWithLevels(medallions: Medallion[]): { build: Build, levels: number[] }[] {
     const comboLength = 4;
-    const allCombinations = getCombinations(medallions, comboLength);
+    const allCombinations = getPermutations(medallions, comboLength);
     
     const builds: Build[] = [];
 
     for(const combination of allCombinations) {
       const build: Build = {
         medallions: combination,
-        reactions: []
+        reactions: [],
+        hash: getBuildHash(combination)
       }
       updateElementalReactions(build);
 
@@ -64,6 +66,12 @@ const medallions = get(medallionStore);
     return newBuilds;
   }
   
+  function getBuildHash(combination: Medallion[]): string {
+    const ids = combination.map(medallion => medallion.id).join(',');
+    const hash = sha256(ids);
+    return hash.toString();
+  }
+
   // Utility function to create a deep copy of a medallion
   function copyMedallion(medallion: Medallion): Medallion {
     return {
@@ -130,8 +138,34 @@ const medallions = get(medallionStore);
     return result;
   }
   
+
+  function getPermutations<T>(medallions: T[], permLength: number): T[][] {
+    const result: T[][] = [];
+    
+    function permute(perm: T[], used: boolean[]): void {
+      if (perm.length === permLength) {
+        result.push([...perm]);
+        return;
+      }
+      for (let i = 0; i < medallions.length; i++) {
+        if (!used[i]) {
+          used[i] = true;
+          perm.push(medallions[i]);
+          permute(perm, used);
+          perm.pop();
+          used[i] = false;
+        }
+      }
+    }
+    
+    permute([], new Array(medallions.length).fill(false));
+    return result;
+  }
+
+
   // Main function to get all builds
   export function getAllBuilds(): Build[] {
+    const startTime = new Date().getTime();
     const validBuildsWithLevels = getValidBuildsWithLevels(medallions);
 
     console.log(validBuildsWithLevels[0]);
@@ -162,5 +196,15 @@ const medallions = get(medallionStore);
     //console.log('Sorted builds with levels', allMedallionsLevel);
     //console.log('Sorted:', levels);
 
-    return sortedBuildsWithLevels.map(({ build }) => build);
+
+    const sortedBuilds: Build[] =  sortedBuildsWithLevels.map(({ build }) => build);
+    const endTime = new Date().getTime();
+
+    const secondTime = (endTime - startTime) / 1000;
+
+    console.log(`Builds generated in ${secondTime} milliseconds.`);
+
+    return sortedBuilds;
 }
+
+

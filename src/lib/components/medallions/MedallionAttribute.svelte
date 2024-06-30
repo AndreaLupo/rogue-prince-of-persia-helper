@@ -89,6 +89,12 @@
          at nearby enemies ({medallionAttribute.amount} damage per dagger).
       {/if}
     {/if}
+
+    {#if medallionAttribute.action === 'increaseDamage'}
+      +{medallionAttribute.amount}{#if medallionAttribute.measure === 'percentage'}%{/if}
+      <span> damage inflicted and received</span>
+
+    {/if}
   </div>
   
 </div>

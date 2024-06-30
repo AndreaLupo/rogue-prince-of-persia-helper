@@ -30,8 +30,8 @@
 header {
 		display: flex;
 		justify-content: space-between;
-    background-color: #0e1341;
-    width: 100%;
+		background-color: #0e1341;
+		width: 100%;
 	}
 
 	.corner {
@@ -56,6 +56,7 @@ header {
 	nav {
 		display: flex;
 		justify-content: center;
+		margin-right: 2rem;
 	}
 
 	svg {

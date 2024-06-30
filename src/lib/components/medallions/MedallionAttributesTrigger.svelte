@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { TriggeringAction } from "../types";
+  import type { TriggeringAction } from "../../../types";
 
   export let triggeringAction: TriggeringAction;
+  export let customDescription;
 
   let highlight = '';
   let intro = '';
@@ -59,6 +60,9 @@
     case "DiveAttack":
       intro = 'When hitting the ground with a';
       highlight = 'dive attack';
+      break;
+    case "CustomDescription":
+      intro = customDescription;
       break;
   }
 </script>

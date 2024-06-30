@@ -1,7 +1,7 @@
 <section class="hero">
   <div class="left-half"></div>
   <div class="right-half">
-    <div class="label">Toolkit</div>
+    <div class="label"></div>
   </div>
 </section>
 
@@ -11,6 +11,10 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+  }
+
+  body {
+    overflow-x: hidden;
   }
 
   .hero {
@@ -76,14 +80,17 @@
 
     .label {
       position: absolute;
-      bottom: -3rem;
+      bottom: -5rem;
       right: 6rem;
       font-family: 'rogue_pop';
       text-transform: uppercase;
       font-size: 2.4rem;
-      background-color: #0e1341cc; /* Optional: to make the text more readable */
-      padding: 4px 1rem;
-      border-radius: 5px;
+      background-size: cover;
+      background-position: center;
+      background-image: url('/toolkit_logo.png');
+      height: 6rem;
+      width: 28rem;
+      
     }
   }
 

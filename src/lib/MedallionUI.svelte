@@ -127,8 +127,9 @@
       </div>
       
       
-
-      <MedallionAttributesTrigger triggeringAction={medallion.triggeringAction}></MedallionAttributesTrigger>
+      {#if medallion.triggeringAction !== 'None'}
+        <MedallionAttributesTrigger triggeringAction={medallion.triggeringAction} customDescription={medallion.description}></MedallionAttributesTrigger>
+      {/if}
 
       <div class="attributes">
         {#each medallion.attributes as medallionAttribute}

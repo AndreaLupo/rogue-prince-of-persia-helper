@@ -622,27 +622,35 @@ const medallionsList: Medallion[] = [
       ]
     },
     description: 'This medallion increase the damage you inflict, as well as the damage you receive.',
-    triggeringAction: 'None',
+    triggeringAction: 'CustomDescription',
     attributes: [
       {
         requiredLevel: 0,
         description: '+25% damage inflicted and received',
-        action: 'set'
+        action: 'increaseDamage',
+        amount: 25,
+        measure: 'percentage'
       },
       {
         requiredLevel: 1,
         description: '+25% damage inflicted and received',
-        action: 'set'
+        action: 'increaseDamage',
+        amount: 25,
+        measure: 'percentage'
       },
       {
         requiredLevel: 2,
         description: '+25% damage inflicted and received',
-        action: 'set'
+        action: 'increaseDamage',
+        amount: 25,
+        measure: 'percentage'
       },
       {
         requiredLevel: 3,
         description: '+25% damage inflicted and received',
-        action: 'set'
+        action: 'increaseDamage',
+        amount: 25,
+        measure: 'percentage'
       },
     ],
     currentLevel: 0,
