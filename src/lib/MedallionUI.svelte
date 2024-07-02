@@ -151,17 +151,17 @@
   }
 
   .small {
-    width: 60px;
-    height: auto;
-  }
-
-  .normal {
     width: 80px;
     height: auto;
   }
 
+  .normal {
+    width: 100px;
+    height: auto;
+  }
+
   .large {
-    width: 120px;
+    width: 140px;
     height: auto;
   }
 
