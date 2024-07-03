@@ -151,7 +151,7 @@
   }
 
   .small {
-    width: 80px;
+    width: 100px;
     height: auto;
   }
 

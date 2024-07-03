@@ -17,8 +17,12 @@ export type NameFilter = {
   name: string;
 }
 
+export type UpgradeMaskFilter = {
+  type: 'upgradeMask';
+  upgradeFilter: any[];
+}
 
-export type Filter = ActionFilter | UpgradableFilter | NameFilter;
+export type Filter = ActionFilter | UpgradableFilter | NameFilter | UpgradeMaskFilter;
 
 
 export const filteringCriteria = writable<Filter[]>([]);
@@ -28,5 +32,5 @@ export const addFilterToMedallions = (newFilter: Filter) => {
 }
 
 export const resetMedallionsFilters = () => {
-  filteringCriteria.set([]);
+  filteringCriteria.update(filters => { filters.forEach(el => filters.pop() ); return filters;});
 }

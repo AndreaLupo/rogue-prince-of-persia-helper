@@ -1,16 +1,12 @@
 <script lang="ts">
     import BuildDetail from '$lib/components/BuildDetail.svelte';
-    import MultiSelect from 'svelte-multiselect';
     
     import { getAllBuilds } from '../../helpers/build-generator';
     import type { Build, Elemental, Medallion, Reaction } from '../../types';
     import { elementalReactions } from '../../helpers/elemental-reaction-checker';
 
-    import Fa from "svelte-fa";
-    import { faCircle } from '@fortawesome/free-solid-svg-icons';
     import medallions from '../../stores/medallion.store';
     import { get } from 'svelte/store';
-    import { filterBuilds } from '../../helpers/build-filter';
     import BuildFilters from './BuildFilters.svelte';
     import Legend from './Legend.svelte';
   
@@ -20,8 +16,6 @@
     let filteredBuilds: Build[] = [];
     let page = 0;    
     let size = 30;
-    let showMedallionsNameFilter = false;
-    let showPositionedMedallionsNameFilter = false;
 
     $: loadedResults = (page+1)*size;
     
@@ -150,7 +144,7 @@
 
     <div class="builds-grid">
         {#each builds as build}
-            <BuildDetail {build}></BuildDetail>   
+            <BuildDetail {build} showDetailLink={true}></BuildDetail>   
         {/each}
     </div>
    

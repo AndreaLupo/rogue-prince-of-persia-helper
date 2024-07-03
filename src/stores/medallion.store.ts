@@ -295,8 +295,8 @@ const medallionsList: Medallion[] = [
     name: 'Flaming Projectile',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
-        getUpgrade('Right', 2)
+        getUpgrade('Left', 1),
+        getUpgrade('Left', 2)
       ]
     },
     description: '',
@@ -434,7 +434,7 @@ const medallionsList: Medallion[] = [
     upgradeMask: {
       upgrades: [
         getUpgrade('Right', 1),
-        getUpgrade('Right', 2)
+        getUpgrade('Left', 1)
       ]
     },
     description: '',
@@ -453,8 +453,7 @@ const medallionsList: Medallion[] = [
     name: 'Sticky Vault',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
-        getUpgrade('Right', 2)
+        getUpgrade('Right', 1)      
       ]
     },
     description: '',
@@ -555,7 +554,7 @@ const medallionsList: Medallion[] = [
       hurlDaggers(0, '', 40)
     ],
     currentLevel: 0,
-    imageName: 'medallion-sticky-dive',
+    imageName: 'medallion-slicing-dive',
     key: 'slicing_dive'
   },
   {
@@ -563,7 +562,6 @@ const medallionsList: Medallion[] = [
     name: 'Immortal',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
       ]
     },
     description: '',
@@ -580,7 +578,7 @@ const medallionsList: Medallion[] = [
     name: 'Flaming Dive',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
+        getUpgrade('Left', 1),
       ]
     },
     description: '',
@@ -618,7 +616,7 @@ const medallionsList: Medallion[] = [
     name: 'Paper Lion',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
+        getUpgrade('Left', 1),
       ]
     },
     description: 'This medallion increase the damage you inflict, as well as the damage you receive.',

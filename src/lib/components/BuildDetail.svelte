@@ -4,6 +4,7 @@
     import ReactionsPalette from "./ReactionsPalette.svelte";
 
     export let build: Build;
+    export let showDetailLink = false;
 
 </script>
 
@@ -16,11 +17,19 @@
     </div>
     <ReactionsPalette build={build}></ReactionsPalette>
 
+    {#if showDetailLink}
+        <div class="detail">
+            <a href={'builds/' + build.hash}>
+                Detail
+            </a>
+        </div>
+    {/if}
 </div>
 
 <style lang="scss">
     .grid {
         display: flex;
+        position: relative;
         align-items: center;
         justify-content: space-evenly;
         column-gap: 2rem;
@@ -29,8 +38,16 @@
             gap: 1rem;
         }
 
-        border: 2px solid #ffbf4e99;
+        /*border: 2px solid #ffbf4e99;*/
+        background-color: #323233;
         border-radius: 15px;
         padding: 1rem;
+
+        .detail {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: 8px 1rem;
+        }
     }
 </style>
