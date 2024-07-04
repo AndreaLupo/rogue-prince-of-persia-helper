@@ -9,37 +9,18 @@
     import { get } from 'svelte/store';
     import BuildFilters from './BuildFilters.svelte';
     import Legend from './Legend.svelte';
+    import { onMount } from 'svelte';
   
-    const allBuilds = getAllBuilds();
+    let allBuilds = [];
 
     let builds: Build[] = [];
     let filteredBuilds: Build[] = [];
     let page = 0;    
     let size = 30;
+    let pageLoading = true;
 
     $: loadedResults = (page+1)*size;
     
-    const colorFire = '#ec8612';
-    const colorResin = '#3b4091';
-    const colorPoison = '#89ac4a';
-
-    const getElementColor = (element: Elemental): string => {
-        switch(element) {
-            case "Fire":
-                return colorFire;
-            case "Resin":
-                return colorResin;
-            case "Poison":
-                return colorPoison;
-        }
-    };
-
-
-    let medallionNameSearch = '';
-    let positionedMedallionNameSearch = '';
-    let positionSearch = 0;
-    let allAttributesUnlocked = false;
-    let activeLevelThreeAttribute = false;
 
     let elements: Elemental[] = ['Fire', 'Resin', 'Poison'];
 
@@ -68,28 +49,6 @@
         });
     }
 
-    /*
-    function filterByMedallionsLevel(level: number) {
-        filteredBuilds.splice(0, filteredBuilds.length);
-        builds.splice(0, builds.length);
-
-        const newBuilds = [];
-        for(const build of allBuilds) {
-            for(const medallion of build.medallions) {
-                if(!medallion.currentLevel) {
-                    // this is just a medallion level 0
-                }
-                if(medallion.currentLevel >= level) {
-                    newBuilds.push(build);
-                    break;
-                }
-            }
-        }
-        filteredBuilds = [...newBuilds];
-        page = 0;
-        getNewPageOfFilteredBuilds();
-    }*/
-
     
     function formatNumber(num: number) {
         return Intl.NumberFormat().format(num);
@@ -105,36 +64,26 @@
     }
 
 
-    filteredBuilds = [...allBuilds];
-    builds = allBuilds.splice(size * page, size * (page + 1));
-
+    onMount( () => {
+        setTimeout(
+            () => {
+                allBuilds = getAllBuilds();
+                pageLoading = false;
+                filteredBuilds = [...allBuilds];
+                builds = allBuilds.splice(size * page, size * (page + 1));
+            }, 0);
+        
+    });
 
   </script>
 
 <main>
-
+    
     <div class="filters-2">
         <BuildFilters bind:filteredBuilds={filteredBuilds} bind:builds={builds} ></BuildFilters>
         <Legend></Legend>
     </div>
     
-    <!--
-    <div>
-        <button on:click={() => showPositionedMedallionsNameFilter=true}>Filter by medallions name and position</button>
-    </div>
-    -->
-    <!--
-    {#if showMedallionsNameFilter}
-        <input bind:value={medallionNameSearch}/>
-        <button on:click={() => filter()}>Filter</button>
-    {/if}
-
-    {#if showPositionedMedallionsNameFilter}
-        <input bind:value={medallionNameSearch}/>
-        <input type="number" min=1 max=4 bind:value={positionSearch}/>
-        <button on:click={() => filter()}>Filter</button>
-    {/if}-->
-
     <div>Note: this page will show only builds where each medallion has at least one attribute activated.</div>
 
     <div class="counts">
@@ -142,16 +91,21 @@
         <div>Filtered builds: <span class="number">{formatNumber(filteredBuilds.length)}</span></div>
     </div>
 
-    <div class="builds-grid">
-        {#each builds as build}
-            <BuildDetail {build} showDetailLink={true}></BuildDetail>   
-        {/each}
-    </div>
-   
-    <div class="load-wrapper">
-        <div>Loaded {loadedResults} of {filteredBuilds.length} total results</div>
-        <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
-    </div>
+    {#if pageLoading}
+        <div>Loading..</div>
+    {:else}
+        <div class="builds-grid">
+            {#each builds as build}
+                <BuildDetail {build} showDetailLink={true}></BuildDetail>   
+            {/each}
+        </div>
+    
+        <div class="load-wrapper">
+            <div>Loaded {loadedResults} of {filteredBuilds.length} total results</div>
+            <button on:click={ () => { getNewPageOfFilteredBuilds() }}>Load more</button>
+        </div>
+    {/if}
+    
 </main>
 
 <style lang="scss">

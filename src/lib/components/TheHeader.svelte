@@ -12,11 +12,11 @@
   <nav id="navbar">
     <ul>
         <li class="menu-intern block-hide-small">
-          <a href="medallions">Medallions</a>
+          <a href="/medallions">Medallions</a>
         </li>
         
 		<li class="menu-intern block-hide-small">
-		  <a href="builds">Builds</a>
+		  <a href="/builds">Builds</a>
 		</li>
 
         <li class="menu-intern block-hide-small">
