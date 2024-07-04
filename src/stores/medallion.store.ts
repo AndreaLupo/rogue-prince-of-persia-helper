@@ -534,7 +534,7 @@ const medallionsList: Medallion[] = [
     triggeringAction: 'AuraBreaker',
     attributes: [
       restoreEnergyPoints(1, '', 25),
-      restoreEnergyPoints(1, '', 25, true)
+      restoreEnergyPoints(2, '', 25, true)
     ],
     currentLevel: 0,
     imageName: 'medallion-aura-breaker',

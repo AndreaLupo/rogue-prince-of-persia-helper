@@ -31,7 +31,7 @@
         display: flex;
         position: relative;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: space-between;
         column-gap: 2rem;
         .medallions {
             display: flex;

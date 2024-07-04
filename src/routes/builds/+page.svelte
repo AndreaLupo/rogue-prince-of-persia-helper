@@ -71,7 +71,7 @@
                 pageLoading = false;
                 filteredBuilds = [...allBuilds];
                 builds = allBuilds.splice(size * page, size * (page + 1));
-            }, 0);
+            }, 1);
         
     });
 
