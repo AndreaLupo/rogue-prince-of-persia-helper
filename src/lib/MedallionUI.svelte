@@ -17,6 +17,7 @@
   export let showTitle = false;
   export let imageDimension: ImageDimension = 'normal';
   export let selectable = true;
+  export let considerMedallionLevelInAttributes = true;
 
   let showPopup = false;
   let position = 'right'; // 'right' or 'left'
@@ -60,7 +61,7 @@
     }
 
 
-    if(medallion === selectedMedallion) {
+    if(medallion.id === selectedMedallion?.id) {
       // click twice on the medallion in medallion's list. User want to deselect it.
       selectedMedallionStore.set(undefined);
       return;
@@ -133,7 +134,7 @@
 
       <div class="attributes">
         {#each medallion.attributes as medallionAttribute}
-          <MedallionAttribute {medallionAttribute} medallionLevel={medallion.currentLevel}/>
+          <MedallionAttribute {medallionAttribute} medallionLevel={medallion.currentLevel} considerMedallionLevel={considerMedallionLevelInAttributes}/>
         {/each}
       </div>
       

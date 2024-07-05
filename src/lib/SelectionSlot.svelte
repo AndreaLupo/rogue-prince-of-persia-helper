@@ -70,14 +70,14 @@
 
 
   const considerMedallion = debounce(() => {
-    slot.highlighting = 'Selected';
-
     selectedMedallionStore.subscribe((medallion) => {
 
       if(!medallion) {
         console.log('No medallion selected');
         return;
       }
+      slot.highlighting = 'Selected';
+      
       const positions: number[] = [];
       medallion?.upgradeMask.upgrades.forEach(upgrade => {
         let destinationIndex = -1;

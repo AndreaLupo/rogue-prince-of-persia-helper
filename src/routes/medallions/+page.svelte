@@ -159,7 +159,7 @@
   <div class="medallions">
     {#each $filteredMedallions as medallion(medallion.name)}
       <div draggable="true">
-        <MedallionUI {medallion} imageDimension="small" ></MedallionUI>
+        <MedallionUI {medallion} imageDimension="small" considerMedallionLevelInAttributes={false} ></MedallionUI>
       </div>
     {/each}
   </div>

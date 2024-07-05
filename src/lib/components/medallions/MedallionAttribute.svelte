@@ -5,13 +5,14 @@
 
   export let medallionAttribute: MedallionAttribute;
   export let medallionLevel: number;
+  export let considerMedallionLevel: boolean = true;
 
   const colorActive = '#F5C54C';
   const colorInactive = '#999894';
   const colorNotAvailable = '#473D36';
 
   let color =  colorNotAvailable;
-  if(medallionAttribute.requiredLevel === 0) {
+  if(medallionAttribute.requiredLevel === 0 || !considerMedallionLevel) {
     color = colorActive;
   } else {
     if(medallionLevel < medallionAttribute.requiredLevel) {
@@ -22,6 +23,14 @@
   }
 
   const getDiamondColor = (level: number): string => {
+    if(!considerMedallionLevel) {
+      if(medallionAttribute.requiredLevel >= level) {
+        return colorActive;
+      } else {
+        return colorNotAvailable;
+      }
+    }
+
     if(medallionAttribute.requiredLevel < level) {
       return colorNotAvailable;
     }
@@ -46,7 +55,7 @@
     {/if}
 
   </div>
-  <div class="description" class:not-locked={medallionLevel < medallionAttribute.requiredLevel} >
+  <div class="description" class:not-locked={medallionLevel < medallionAttribute.requiredLevel && considerMedallionLevel} >
     {#if medallionAttribute.action === 'set'}
       Set <span>{medallionAttribute.upgradable}</span> on the area
     {/if}
