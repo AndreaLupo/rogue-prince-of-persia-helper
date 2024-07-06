@@ -13,10 +13,21 @@
     upgrades.upgrades.push(thisMedallion);
   }
   upgrades.upgrades.sort((a, b) => {
-    let points = a.hop - b.hop;
-    if(a.direction === 'Left' || b.direction === 'Left') {
-      points = b.hop - a.hop;
+    let points = 0;
+    let aPoints = 0;
+    let bPoints = 0;
+    if(a.direction === 'Right') {
+      aPoints = a.hop;
+    } else {
+      aPoints = -a.hop;
     }
+    if(b.direction === 'Right') {
+      bPoints = b.hop;
+    } else {
+      bPoints = -b.hop;
+    }
+
+    points = aPoints - bPoints;
     return points;
   });
 </script>

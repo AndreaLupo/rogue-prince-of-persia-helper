@@ -1,7 +1,7 @@
 import { derived } from "svelte/store";
 import medallionStore from "./medallion.store";
-import { filteringCriteria, type ActionFilter, type Filter, type UpgradableFilter, type UpgradeMaskFilter } from "./medallions-filtering-criteria.store";
-import type { Medallion, MedallionLevelUpgrade, MedallionUpgradeMask } from "../types";
+import { filteringCriteria, type ActionFilter, type Filter, type TriggeringActionFilter, type UpgradableFilter, type UpgradeMaskFilter } from "./medallions-filtering-criteria.store";
+import type { Medallion, MedallionLevelUpgrade, MedallionUpgradeMask, TriggeringAction } from "../types";
 import sha256 from "crypto-js/sha256";
 
 export const filteredMedallions = derived(
@@ -17,14 +17,15 @@ export const filteredMedallions = derived(
         case 'upgradable':
           return medallion.attributes.some(attribute => attribute.upgradable === (filter as UpgradableFilter).upgradable);
         case 'upgradeMask':
-        const upgradeMasks = filter as UpgradeMaskFilter;
-        for(const upgrade of upgradeMasks.upgradeFilter) {
-          let mask = upgrade.value as MedallionUpgradeMask;
+          const upgradeMasks = filter as UpgradeMaskFilter;
+          for(const upgrade of upgradeMasks.upgradeFilter) {
+            let mask = upgrade.value as MedallionUpgradeMask;
 
-          return maskUpgradeComparison(medallion.upgradeMask, mask);
-
-        }  
-        return false;
+            return maskUpgradeComparison(medallion.upgradeMask, mask);
+          }
+        case 'triggeringAction':
+          const action = filter as TriggeringActionFilter;
+          return action.actions.includes(medallion.triggeringAction);
         default:
           return true; // If filter type is not recognized, consider it as matching
       }

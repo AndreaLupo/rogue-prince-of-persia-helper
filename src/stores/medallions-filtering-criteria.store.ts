@@ -22,7 +22,12 @@ export type UpgradeMaskFilter = {
   upgradeFilter: any[];
 }
 
-export type Filter = ActionFilter | UpgradableFilter | NameFilter | UpgradeMaskFilter;
+export type TriggeringActionFilter = {
+  type: 'triggeringAction';
+  actions: any[];
+}
+
+export type Filter = ActionFilter | UpgradableFilter | NameFilter | UpgradeMaskFilter | TriggeringActionFilter;
 
 
 export const filteringCriteria = writable<Filter[]>([]);

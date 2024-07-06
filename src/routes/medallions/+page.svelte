@@ -64,9 +64,9 @@
   ]
 
   
-  type MultiSelectOption = {label: string, value: MedallionUpgradeMask};
+  type MultiSelectOption<T> = {label: string, value: T};
 
-  const upgradeFiltersLabels: MultiSelectOption[] = [];
+  const upgradeFiltersLabels: MultiSelectOption<MedallionUpgradeMask>[] = [];
   let upgradeFilters: any[] = [];
 
   for(const upgrade of medallionsUpgrade) {
@@ -76,8 +76,13 @@
         });
     }
 
+    let triggeringActionsFiltersLabels: MultiSelectOption<TriggeringAction>[] = [];
+    let triggeringActionsFilters: any[] = [];
+
+
 
   const filterByAction = (triggeringAction: TriggeringAction) => {
+
     resetMedallionsFilters();
     addFilterToMedallions({type: 'action', triggeringAction});
   }
@@ -90,7 +95,16 @@
 
   const filterByUpgradeMask = (event: any) => {
     console.log('event: ', event);
-    const option: MultiSelectOption = event.value;
+    const option: MultiSelectOption<MedallionUpgradeMask> = event.value;
+    console.log('event: ', option);
+
+    resetMedallionsFilters();
+    addFilterToMedallions({type:'upgradeMask', upgradeFilter: upgradeFilters})
+  }
+
+  const filterByTriggeringAction = (event: any) => {
+    console.log('event: ', event);
+    const option: MultiSelectOption<TriggeringAction> = event.value;
     console.log('event: ', option);
 
     resetMedallionsFilters();
@@ -103,6 +117,16 @@
 
   filteredMedallions.subscribe((medallions) => {
     // console.log("Filtered medallions: ", medallions);
+    const triggeringActions = [...new Set(medallions.map(medallion => medallion.triggeringAction))];
+  
+    for(const triggeringAction of triggeringActions) {
+      const filteringLabel: MultiSelectOption<TriggeringAction> = {
+          label: triggeringAction,
+          value: triggeringAction
+      }
+      
+      triggeringActionsFiltersLabels.push(filteringLabel);
+    }
   })
 
 </script>
@@ -143,6 +167,21 @@
               <MedallionUpgradePalette upgrades={option.value}>
   
               </MedallionUpgradePalette>  
+            </div> 
+        </div>
+  
+  
+     </MultiSelect>
+    </div>
+
+    <div class="multiselect">
+      <MultiSelect --sms-options-bg="#242424" --sms-width="20rem" bind:selected={triggeringActionsFilters} options={triggeringActionsFiltersLabels} 
+        placeholder="Select a triggering action.."
+        minSelect={0} maxSelect={1} 
+        on:change={ (option) => { filterByAction(option.detail.option?.value)} }  let:option>
+        <div >
+            <div class="multiselect-option">
+              {option.label}
             </div> 
         </div>
   

@@ -120,7 +120,7 @@ const medallionsList: Medallion[] = [
     name: 'Flaming counter',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1)
+        getUpgrade('Left', 1)
       ]
     },
     description: '',
@@ -377,8 +377,7 @@ const medallionsList: Medallion[] = [
     name: 'Sticky Kick',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
-        getUpgrade('Right', 2)
+        getUpgrade('Right', 1)
       ]
     },
     description: '',
@@ -470,8 +469,7 @@ const medallionsList: Medallion[] = [
     name: 'Slicing Vault',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1),
-        getUpgrade('Right', 2)
+        getUpgrade('Right', 1)
       ]
     },
     description: '',
@@ -507,7 +505,8 @@ const medallionsList: Medallion[] = [
     name: 'Spartan',
     upgradeMask: {
       upgrades: [
-        getUpgrade('Right', 1)
+        getUpgrade('Right', 1),
+        getUpgrade('Right', 2)
       ]
     },
     description: '',
