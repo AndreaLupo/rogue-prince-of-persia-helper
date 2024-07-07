@@ -1,6 +1,5 @@
 <script lang="ts">
 
-    import { faCircle } from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
     import type { Elemental } from "../../types";
 
@@ -59,7 +58,10 @@
         <span>Poison</span>
     </div>
     <div class="legend-item">
-        <Fa size="lg" icon={faCircle} color={getElementColor('Resin')}/>
+        {#await import(`$lib/assets/elements/fire+poison.png`) then { default: src }}
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img {src} alt="Image"  style="width: 2rem"/>
+    {/await}
         <span>Poison+Fire</span>
     </div>
     
