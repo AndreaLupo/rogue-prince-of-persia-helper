@@ -48,10 +48,12 @@ const medallions = get(medallionStore);
         reactions: [],
         hash: getBuildHash(combination)
       }
-      updateElementalReactions(build);
+      // updateElementalReactions(build);
 
       builds.push(build);
     }
+
+    console.log('Elemental reactions updated');
 
     const newBuilds = builds
       .map(build => ({ build, levels: calculateLevels(build) }))
