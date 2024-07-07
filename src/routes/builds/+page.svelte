@@ -1,7 +1,6 @@
 <script lang="ts">
     import BuildDetail from '$lib/components/BuildDetail.svelte';
     
-    import { getAllBuilds } from '../../helpers/build-generator';
     import type { Build, Elemental, Medallion, Reaction } from '../../types';
     import { elementalReactions } from '../../helpers/elemental-reaction-checker';
 
@@ -11,6 +10,8 @@
     import Legend from './Legend.svelte';
     import { onMount } from 'svelte';
   
+    import medallionsBuilds from '../../stores/build-generation.store';
+
     let allBuilds = [];
 
     let builds: Build[] = [];
@@ -65,13 +66,23 @@
 
 
     onMount( () => {
+        const startTime = new Date();
         setTimeout(
             () => {
-                allBuilds = getAllBuilds();
-                pageLoading = false;
-                filteredBuilds = [...allBuilds];
-                builds = allBuilds.splice(size * page, size * (page + 1));
-            }, 1);
+                console.log('Start loading builds page...');
+                medallionsBuilds.subscribe((medBuilds) => {
+                    console.log('Got all builds!');
+                    allBuilds = medBuilds;
+                    pageLoading = false;
+                    filteredBuilds = [...allBuilds];
+                    builds = allBuilds.splice(size * page, size * (page + 1));
+                    const endTime = new Date();
+
+                    console.log('Load page in ', (endTime-startTime)/1000);
+                });
+
+                
+            }, 10);
         
     });
 
