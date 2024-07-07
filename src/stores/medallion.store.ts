@@ -663,3 +663,6 @@ console.log(medallionsList);
 export default medallions;
 
 export const selectedMedallionStore: Writable<Medallion | undefined> = writable();
+
+export const medallionsMap = new Map(medallionsList.map(medallion => [medallion.id, medallion]));
+

@@ -2,7 +2,15 @@ import { isElemental, type Build, type Medallion } from "../types";
 import { getAllBuilds } from "./build-generator";
 import { elementalReactions } from "./elemental-reaction-checker";
 
-const allBuilds = getAllBuilds();
+import medallionsBuilds from '$lib/../stores/build-generation.store';
+
+
+let allBuilds = getAllBuilds();
+
+medallionsBuilds.subscribe((medBuilds) => {
+    console.log('Got all builds in filters!');
+    allBuilds = medBuilds;
+});
 
 let builds: Build[] = [];
 let filteredBuilds: Build[] = [];

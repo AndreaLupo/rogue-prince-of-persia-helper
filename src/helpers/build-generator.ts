@@ -34,11 +34,15 @@ const medallions = get(medallionStore);
 
   function getValidBuildsWithLevels(medallions: Medallion[]): { build: Build, levels: number[] }[] {
     const comboLength = 4;
-    const allCombinations = getPermutations(medallions, comboLength);
+    const allPermutations = getPermutations(medallions, comboLength);
     
+    return createBuildsFromPermutations(allPermutations);
+  }
+  
+  export function createBuildsFromPermutations(medallionsPermutations: Medallion[][]) {
     const builds: Build[] = [];
 
-    for(const combination of allCombinations) {
+    for(const combination of medallionsPermutations) {
       const build: Build = {
         medallions: combination,
         reactions: [],
@@ -65,7 +69,7 @@ const medallions = get(medallionStore);
 
     return newBuilds;
   }
-  
+
   function getBuildHash(combination: Medallion[]): string {
     const ids = combination.map(medallion => medallion.id).join(',');
     const hash = sha256(ids);
@@ -173,11 +177,6 @@ const medallions = get(medallionStore);
     // console.log('validBuildsWithLevels:', validBuildsWithLevels.length);
     const sortedBuildsWithLevels = sortBuilds(validBuildsWithLevels);
     
-    const levels = sortedBuildsWithLevels.map(build => {
-      return build.levels;  
-    } )
-
-
     const allMedallionsLevel: {name: string,  level: number}[][] = [];
     for(const levelBuild of sortedBuildsWithLevels) {
       const build = levelBuild.build;
