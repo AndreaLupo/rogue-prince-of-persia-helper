@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { createBuildsFromPermutations, getAllBuilds } from "../helpers/build-generator";
 import buildMedallions from '$lib/data/builds-medallions.json' assert { type: "json" };
 import { medallionsMap } from "./medallion.store";
@@ -6,6 +6,7 @@ import type { Build, Medallion } from "../types";
 
 //const builds = getAllBuilds();
 let builds: Build[] = [];
+let buildStore: Writable<Build[]> | undefined;
 
 
 // Function to sort builds based on the calculated score
@@ -35,8 +36,12 @@ function sortBuilds(validBuildsWithLevels: { build: Build, levels: number[] }[])
   }
 
 
+function createBuildStore() {
+  if(buildStore != undefined) {
+    return buildStore;
+  }
 
-if(Array.isArray(buildMedallions)) {
+  if(Array.isArray(buildMedallions)) {
     const allMedallionsBuilds: Medallion[][] = [];
     for(const build of buildMedallions) {
         const medallions: Medallion[] = [];
@@ -54,37 +59,16 @@ if(Array.isArray(buildMedallions)) {
     
     console.log('Sorted builds with levels');
 
-    /*
-    const allMedallionsLevel: {name: string,  level: number}[][] = [];
-    for(const levelBuild of sortedBuildsWithLevels) {
-      const build = levelBuild.build;
-      const medallionsName = build.medallions.map(medallion => medallion.name);
-      const buildLevels = [];
-      for(let index = 0; index < build.medallions.length; index++) {
-        const medallionsLevel = {
-          name: medallionsName[index],
-          level: levelBuild.levels[index]
-        }
-        buildLevels.push(medallionsLevel);
-      }
-      allMedallionsLevel.push(buildLevels);
-    }
-
-    console.log('Sorted builds with levels', allMedallionsLevel);
-    */
-    //console.log('Sorted:', levels);
-
-
     const sortedBuilds: Build[] =  sortedBuildsWithLevels.map(({ build }) => build);
     builds = sortedBuilds;
+  }
+
+  console.log('First new build:', builds[0]);
+
+  buildStore = writable(builds);
+  return buildStore;
 }
 
-  
 
 
-console.log('First new build:', builds[0]);
-
-const allBuilds = writable(builds);
-
-
-export default allBuilds;
+export default createBuildStore;

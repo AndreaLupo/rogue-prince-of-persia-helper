@@ -10,7 +10,7 @@
     import Legend from './Legend.svelte';
     import { onMount } from 'svelte';
   
-    import medallionsBuilds from '../../stores/build-generation.store';
+    import createBuildStore from '../../stores/build-generation.store';
 
     let allBuilds = [];
 
@@ -21,7 +21,7 @@
     let pageLoading = true;
 
     $: loadedResults = (page+1)*size;
-    
+    let medallionsBuilds;
 
     let elements: Elemental[] = ['Fire', 'Resin', 'Poison'];
 
@@ -70,15 +70,13 @@
         setTimeout(
             () => {
                 console.log('Start loading builds page...');
-                medallionsBuilds.subscribe((medBuilds) => {
+                medallionsBuilds = createBuildStore().subscribe((medBuilds) => {
                     console.log('Got all builds!');
                     allBuilds = medBuilds;
                     pageLoading = false;
                     filteredBuilds = [...allBuilds];
                     builds = allBuilds.splice(size * page, size * (page + 1));
                     const endTime = new Date();
-
-                    console.log('Load page in ', (endTime-startTime)/1000);
                 });
 
                 

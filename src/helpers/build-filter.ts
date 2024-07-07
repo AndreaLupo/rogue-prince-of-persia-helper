@@ -1,13 +1,11 @@
 import { isElemental, type Build, type Medallion } from "../types";
-import { getAllBuilds } from "./build-generator";
-import { elementalReactions } from "./elemental-reaction-checker";
 
-import medallionsBuilds from '$lib/../stores/build-generation.store';
+import createBuildStore from '$lib/../stores/build-generation.store';
 
 
-let allBuilds = getAllBuilds();
+let allBuilds: Build[] = [];
 
-medallionsBuilds.subscribe((medBuilds) => {
+createBuildStore().subscribe((medBuilds) => {
     console.log('Got all builds in filters!');
     allBuilds = medBuilds;
 });
